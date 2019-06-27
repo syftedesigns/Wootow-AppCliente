@@ -1,4 +1,19 @@
 .welcome-card ion-img {
-  max-height: 35vh;
-  overflow: hidden;
+    max-height: 35vh;
+    overflow: hidden;
+}
+
+.tool-transparent {
+    --background: none !important;
+    --ion-color-base: none !important;
+    --color: none !important
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+    background: orange !important;
+}
+
+.duration-popup {
+    position: relative;
+    top: -40em
 }

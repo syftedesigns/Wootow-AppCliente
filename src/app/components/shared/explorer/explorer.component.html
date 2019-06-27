@@ -1,0 +1,118 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="modal.dismiss(null)" icon-only>
+                <ion-icon name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+    <ion-grid>
+        <ion-row align="center">
+            <ion-col size="12" align-self="center">
+                <form>
+                    <ion-searchbar (ionFocus)="isSearchingOrigin = true; isSearchingDestiny = false" name="origin" (ionChange)="ExplorePointers($event, 'origin');" [(ngModel)]="TextOrigin" (ionClear)="LocationOrigin = []" placeholder="Introducir la dirección de Origen" searchIcon="radio-button-on"
+                        autocomplete="true" autocorrect="true"></ion-searchbar>
+                    <ion-searchbar (ionFocus)="isSearchingOrigin = false; isSearchingDestiny = true" name="destiny" (ionChange)="ExplorePointers($event, 'destiny');" (ionClear)="Locations = []" placeholder="¿A dónde ibas?" searchIcon="flag" autocomplete="true" autocorrect="true"></ion-searchbar>
+                </form>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-header>
+<ion-content>
+    <ion-grid>
+        <ion-row align="center">
+            <ion-col *ngIf="isSearchingDestiny" size="12" align-self="center">
+                <ion-card>
+                    <ion-card-content>
+                        <ion-list lines="none">
+                            <ion-list-header class="text-center">
+                                <mat-hint class="font-bold font-12">
+                                    Where were you going?
+                                </mat-hint>
+                            </ion-list-header>
+                            <ion-item *ngFor="let zone of Locations">
+                                <ion-fab style="position: relative; left: -0.5em;">
+                                    <ion-fab-button (click)="CatchDestiny(zone);" *ngIf="zone.place_type[0] === 'country' || zone.place_type[0] === 'region'" size="small" color="medium">
+                                        <mat-icon class="material-icons">location_on</mat-icon>
+                                    </ion-fab-button>
+                                    <ion-fab-button (click)="CatchDestiny(zone);" *ngIf="zone.place_type[0] === 'poi'" class="wootow-btn" size="small">
+                                        <mat-icon class="material-icons text-dark">location_city</mat-icon>
+                                    </ion-fab-button>
+                                    <ion-fab-button (click)="CatchDestiny(zone);" *ngIf="zone.place_type[0] === 'place'" color="primary" size="small">
+                                        <mat-icon class="material-icons">traffic</mat-icon>
+                                    </ion-fab-button>
+                                    <ion-fab-button (click)="CatchDestiny(zone);" *ngIf="zone.place_type[0] === 'neighborhood'" color="secondary" size="small">
+                                        <mat-icon class="material-icons">directions_bike</mat-icon>
+                                    </ion-fab-button>
+                                    <ion-fab-button (click)="CatchDestiny(zone);" *ngIf="zone.place_type[0] === 'address'" class="wootow-btn" size="small">
+                                        <mat-icon class="material-icons">directions</mat-icon>
+                                    </ion-fab-button>
+                                    <ion-fab-button (click)="CatchDestiny(zone);" *ngIf="zone.place_type[0] === 'postcode'" color="secondary" size="small">
+                                        <mat-icon class="material-icons">store_mall_directory</mat-icon>
+                                    </ion-fab-button>
+                                </ion-fab>
+                                <ion-label (click)="CatchDestiny(zone);" class="text-center w-100" text-wrap>
+                                    <mat-hint class="font-bold font-10">
+                                        {{zone.place_name}}
+                                    </mat-hint>
+                                    <div class="space-10"></div>
+                                    <mat-divider></mat-divider>
+                                    <div class="space-10"></div>
+                                    <mat-hint class="text-muted font-10">
+                                        {{zone.text}}
+                                    </mat-hint>
+                                </ion-label>
+                            </ion-item>
+                        </ion-list>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+            <ion-col *ngIf="isSearchingOrigin" size="12" align-self="center">
+                <ion-card>
+                    <ion-card-content>
+                        <ion-list lines="none">
+                            <ion-list-header class="text-center">
+                                <mat-hint class="font-bold font-12">
+                                    Are you in one of this places? If not try to looking for him.
+                                </mat-hint>
+                            </ion-list-header>
+                            <ion-item *ngFor="let origin of LocationOrigin">
+                                <ion-fab style="position: relative; left: -0.5em;">
+                                    <ion-fab-button (click)="CatchOrigin(origin);" *ngIf="origin.place_type[0] === 'country' || origin.place_type[0] === 'region'" size="small" color="medium">
+                                        <mat-icon class="material-icons">location_on</mat-icon>
+                                    </ion-fab-button>
+                                    <ion-fab-button (click)="CatchOrigin(origin);" *ngIf="origin.place_type[0] === 'poi'" class="wootow-btn" size="small">
+                                        <mat-icon class="material-icons text-dark">location_city</mat-icon>
+                                    </ion-fab-button>
+                                    <ion-fab-button (click)="CatchOrigin(origin);" *ngIf="origin.place_type[0] === 'place'" color="primary" size="small">
+                                        <mat-icon class="material-icons">traffic</mat-icon>
+                                    </ion-fab-button>
+                                    <ion-fab-button (click)="CatchOrigin(origin);" *ngIf="origin.place_type[0] === 'neighborhood'" color="secondary" size="small">
+                                        <mat-icon class="material-icons">directions_bike</mat-icon>
+                                    </ion-fab-button>
+                                    <ion-fab-button (click)="CatchOrigin(origin);" *ngIf="origin.place_type[0] === 'address'" class="wootow-btn" size="small">
+                                        <mat-icon class="material-icons">directions</mat-icon>
+                                    </ion-fab-button>
+                                    <ion-fab-button (click)="CatchOrigin(origin);" *ngIf="origin.place_type[0] === 'postcode'" color="secondary" size="small">
+                                        <mat-icon class="material-icons">store_mall_directory</mat-icon>
+                                    </ion-fab-button>
+                                </ion-fab>
+                                <ion-label (click)="CatchOrigin(origin);" class="text-center w-100" text-wrap>
+                                    <mat-hint class="font-bold font-10">
+                                        {{origin.place_name}}
+                                    </mat-hint>
+                                    <div class="space-10"></div>
+                                    <mat-divider></mat-divider>
+                                    <div class="space-10"></div>
+                                    <mat-hint class="text-muted font-10">
+                                        {{origin.text}}
+                                    </mat-hint>
+                                </ion-label>
+                            </ion-item>
+                        </ion-list>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

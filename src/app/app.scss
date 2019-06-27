@@ -4,3 +4,14 @@
 // styles are for the entire app and not just one component. Additionally, this 
 // file can hold Sass mixins, functions, and placeholder classes to be imported 
 // and used throughout the application.
+.wootow-bg {
+    --background: #F8EC32 !important
+}
+
+ion-item>* {
+    color: #636363 !important
+}
+
+.edit>.mat-form-field-appearance-fill .mat-form-field-flex {
+    background: rgba(255, 255, 255, 0.6) !important;
+}

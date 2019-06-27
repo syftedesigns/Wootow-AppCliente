@@ -1,0 +1,67 @@
+<ion-header>
+    <ion-toolbar noborder>
+        <ion-buttons>
+            <ion-button (click)="modal.dismiss(null);" icon-only slot="start">
+                <ion-icon name="arrow-round-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-grid>
+        <ion-row align="center">
+            <ion-col align-self="center" size="12">
+                <ion-card>
+                    <ion-card-header *ngIf="withprofile">
+                        <ion-slides pager="true" scrollbar="true">
+                            <ion-slide>
+                                <img src="./assets/images/demo/toyota-fortuner.jpg" alt="">
+                            </ion-slide>
+                            <ion-slide>
+                                <img src="./assets/images/demo/toyota-fortuner.jpg" alt="">
+                            </ion-slide>
+                            <ion-slide>
+                                <img src="./assets/images/demo/toyota-fortuner.jpg" alt="">
+                            </ion-slide>
+                        </ion-slides>
+                    </ion-card-header>
+                    <ion-card-header *ngIf="!withprofile">
+                        <img src="./assets/images/notavailable-194.jpg" alt="">
+                        <ion-button expand="full" shape="round" class="wootow-btn text-dark">
+                            Upload photos
+                        </ion-button>
+                    </ion-card-header>
+                    <ion-card-content padding>
+                        <form>
+                            <div class="form-group">
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <mat-label>Vehicle identifier</mat-label>
+                                    <input matInput placeholder="I.E: Toyota">
+                                    <mat-hint>Must be completed to identify you quickly, example, if you have 30 vehicles this will allow to identify you easily</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-group">
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <mat-label>License plate</mat-label>
+                                    <input matInput>
+                                    <mat-hint>Put your license plate number so the driver can easily find you once it arrives</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-group">
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <mat-label>Vehicle Colour</mat-label>
+                                    <input matInput>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-group">
+                                <ion-button class="wootow-btn text-dark" expand="full" shape="round">
+                                    Sign in Vehicle
+                                </ion-button>
+                            </div>
+                        </form>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

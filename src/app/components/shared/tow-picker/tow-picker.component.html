@@ -1,0 +1,65 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="BottomsheetRef.dismiss();" icon-only>
+                <ion-icon name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>
+            <mat-hint style="font-size: 12px !important">
+                Choose a Tow truck
+            </mat-hint>
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-grid>
+    <ion-row align="center">
+        <ion-col align-self="center" size="12">
+            <ion-slides scrollbar="true">
+                <ion-slide>
+                    <ion-row>
+                        <ion-col>
+                            <ion-card (click)="PickerTruck('hook');" [ngClass]="{'bg-dark': !this.TruckType1, 'bg-white': this.TruckType1}">
+                                <ion-card-header>
+                                    <ion-avatar class="offset-1">
+                                        <img src="./assets/images/truck.png">
+                                    </ion-avatar>
+                                    <ion-card-title>
+                                        <ion-chip *ngIf="this.TruckType1" color="secondary">Hook Truck</ion-chip>
+                                        <ion-chip *ngIf="!this.TruckType1" color="light">Hook Truck</ion-chip>
+                                    </ion-card-title>
+                                    <ion-card-subtitle [ngClass]="{'text-white': !this.TruckType1, 'text-dark': this.TruckType1}">
+                                        ${{HookPrice}}
+                                    </ion-card-subtitle>
+                                </ion-card-header>
+                            </ion-card>
+                        </ion-col>
+                        <ion-col>
+                            <ion-card (click)="PickerTruck('flatbet');" [ngClass]="{'bg-dark': !this.TruckType2, 'bg-white': this.TruckType2}">
+                                <ion-card-header>
+                                    <ion-avatar class="offset-1">
+                                        <img src="./assets/images/flatbet.png">
+                                    </ion-avatar>
+                                    <ion-card-title>
+                                        <ion-chip *ngIf="!this.TruckType2" color="light">Flatbet</ion-chip>
+                                        <ion-chip *ngIf="this.TruckType2" color="secondary">Flatbet</ion-chip>
+                                    </ion-card-title>
+                                    <ion-card-subtitle [ngClass]="{'text-white': !this.TruckType2, 'text-dark': this.TruckType2}">
+                                        ${{FlatPrice}}
+                                    </ion-card-subtitle>
+                                </ion-card-header>
+                            </ion-card>
+                        </ion-col>
+                    </ion-row>
+                </ion-slide>
+            </ion-slides>
+            <div class="space-20"></div>
+            <mat-divider></mat-divider>
+            <div class="space-20"></div>
+            <ion-button expand="full" class="wootow-btn text-dark">
+                <mat-hint *ngIf="this.TruckType1">Confirm Hook truck</mat-hint>
+                <mat-hint *ngIf="this.TruckType2">Confirm Flatbet</mat-hint>
+            </ion-button>
+        </ion-col>
+    </ion-row>
+</ion-grid>

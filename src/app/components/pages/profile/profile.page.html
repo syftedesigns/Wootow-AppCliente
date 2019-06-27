@@ -1,0 +1,170 @@
+<ion-header>
+    <ion-toolbar class="wootow-bg">
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Perfil</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid>
+        <ion-row align="center">
+            <ion-col align-self="center" size="12">
+                <ion-card>
+                    <ion-card-header>
+                        <img class="r-50 w-50 offset-3" src="./assets/images/demo/1.jpg">
+                        <ion-fab vertical="top" horizontal="end">
+                            <ion-fab-button (click)="GalleryControllerFunction();" class="wootow-btn">
+                                <ion-icon class="text-default" name="camera"></ion-icon>
+                            </ion-fab-button>
+                        </ion-fab>
+                    </ion-card-header>
+                    <ion-card-content>
+                        <ion-row>
+                            <ion-col>
+                                <p>
+                                    <mat-hint class="text-default">
+                                        Cesar Silva <br> +51 0000000 <br> lycp@gmail.com
+                                    </mat-hint>
+                                </p>
+                            </ion-col>
+                            <ion-col>
+                                <ion-button (click)="OpenProfile();" class="wootow-btn text-dark" expand="full" shape="round">
+                                    Editar mi perfil
+                                </ion-button>
+                            </ion-col>
+                        </ion-row>
+                    </ion-card-content>
+                </ion-card>
+                <ion-card>
+                    <ion-card-header>
+                        <ion-card-title style="font-size: 14px !important; display:none ">
+                            <mat-hint>
+                                No tienes vehiculos registrados
+                            </mat-hint>
+                            <ion-button class="wootow-btn text-default" expand="full" shape="round">
+                                Registrar mi primer vehiculo
+                            </ion-button>
+                        </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-header>
+                        <ion-title>
+                            Mis Vehiculos
+                        </ion-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                        <ion-fab vertical="top" horizontal="end">
+                            <ion-fab-button (click)="OpenVehiclePage(false);" class="wootow-btn">
+                                <ion-icon name="add"></ion-icon>
+                            </ion-fab-button>
+                        </ion-fab>
+                        <ion-slides pager="true" scrollbar="true">
+                            <ion-slide>
+                                <ion-card no-border>
+                                    <ion-card-header>
+                                        <img src="./assets/images/demo/toyota-fortuner.jpg">
+                                    </ion-card-header>
+                                    <ion-card-content padding>
+                                        <ion-list lines="none">
+                                            <ion-item>
+                                                <ion-label class="offset-1 text-center">
+                                                    Toyota Fortuner <br> 1ATERX <br> Blanco
+                                                </ion-label>
+                                            </ion-item>
+                                        </ion-list>
+                                    </ion-card-content>
+                                    <ion-footer>
+                                        <ion-toolbar no-border>
+                                            <ion-row align="center">
+                                                <ion-col>
+                                                    <ion-button (click)="OpenVehiclePage(true);" class="wootow-btn" expand="full" shape="fill">
+                                                        <ion-icon class="text-default" name="create"></ion-icon>
+                                                    </ion-button>
+                                                </ion-col>
+                                                <ion-col>
+                                                    <ion-button class="btn-delete" color="warning" expand="full" shape="fill">
+                                                        <ion-icon name="trash"></ion-icon>
+                                                    </ion-button>
+                                                </ion-col>
+                                            </ion-row>
+                                        </ion-toolbar>
+                                    </ion-footer>
+                                </ion-card>
+                            </ion-slide>
+                            <ion-slide>
+                                <ion-card no-border>
+                                    <ion-card-header>
+                                        <img src="./assets/images/demo/special.webp">
+                                    </ion-card-header>
+                                    <ion-card-content padding>
+                                        <ion-list lines="none">
+                                            <ion-item>
+                                                <ion-label class="offset-1 text-center">
+                                                    Lamborghini <br> 1ATERX <br> Negro
+                                                </ion-label>
+                                            </ion-item>
+                                        </ion-list>
+                                    </ion-card-content>
+                                    <ion-footer>
+                                        <ion-toolbar no-border>
+                                            <ion-row align="center">
+                                                <ion-col>
+                                                    <ion-button (click)="OpenVehiclePage(true);" class="wootow-btn" expand="full" shape="fill">
+                                                        <ion-icon class="text-default" name="create"></ion-icon>
+                                                    </ion-button>
+                                                </ion-col>
+                                                <ion-col>
+                                                    <ion-button class="btn-delete" color="warning" expand="full" shape="fill">
+                                                        <ion-icon name="trash"></ion-icon>
+                                                    </ion-button>
+                                                </ion-col>
+                                            </ion-row>
+                                        </ion-toolbar>
+                                    </ion-footer>
+                                </ion-card>
+                            </ion-slide>
+                        </ion-slides>
+                    </ion-card-content>
+                </ion-card>
+                <ion-card>
+                    <ion-card-header>
+                        <ion-card-title class="text-default" style="font-size: 18px">
+                            Favoritos
+                        </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content padding>
+                        <ion-list lines="none" class="text-center offset-1 item-list-dir">
+                            <ion-item>
+                                <mat-icon class="material-icons">visibility</mat-icon>
+                                <ion-label>
+                                    <mat-hint>
+                                        Dirección en particular
+                                    </mat-hint>
+                                </ion-label>
+                            </ion-item>
+                            <ion-item>
+                                <mat-icon class="material-icons">visibility</mat-icon>
+                                <ion-label>
+                                    <mat-hint>
+                                        Dirección Laboral
+                                    </mat-hint>
+                                </ion-label>
+                            </ion-item>
+                        </ion-list>
+                        <ion-list lines="none" class="text-left item-list-dir2">
+                            <ion-item>
+                                <mat-icon class="material-icons">add</mat-icon>
+                                <ion-label>
+                                    <mat-hint>
+                                        Más ubicaciones
+                                    </mat-hint>
+                                </ion-label>
+                            </ion-item>
+                        </ion-list>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

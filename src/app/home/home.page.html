@@ -1,44 +1,81 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>
-      Home
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-    <ion-card class="welcome-card">
-      <ion-img src="/assets/shapes.svg"></ion-img>
-      <ion-card-header>
-        <ion-card-subtitle>Get Started</ion-card-subtitle>
-        <ion-card-title>Welcome to Ionic</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <p>Now that your app has been created, you'll want to start building out features and components. Check out some of the resources below for next steps.</p>
-      </ion-card-content>
-    </ion-card>
-    <ion-list lines="none">
-      <ion-list-header>
-        <ion-label>Resources</ion-label>
-      </ion-list-header>
-      <ion-item href="https://ionicframework.com/docs/">
-        <ion-icon slot="start" color="medium" name="book"></ion-icon>
-        <ion-label>Ionic Documentation</ion-label>
-      </ion-item>
-      <ion-item href="https://ionicframework.com/docs/building/scaffolding">
-        <ion-icon slot="start" color="medium" name="build"></ion-icon>
-        <ion-label>Scaffold Out Your App</ion-label>
-      </ion-item>
-      <ion-item href="https://ionicframework.com/docs/layout/structure">
-        <ion-icon slot="start" color="medium" name="grid"></ion-icon>
-        <ion-label>Change Your App Layout</ion-label>
-      </ion-item>
-      <ion-item href="https://ionicframework.com/docs/theming/basics">
-        <ion-icon slot="start" color="medium" name="color-fill"></ion-icon>
-        <ion-label>Theme Your App</ion-label>
-      </ion-item>
-    </ion-list>
+<ion-content scrollY="false">
+    <mgl-map [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="[14]" [center]="[CurrentPosition.longitude, CurrentPosition.latitude]">
+        <!-- Payment Popup -->
+        <mgl-control *ngIf="IsRoutePicked" position="top-right">
+            <ion-fab vertical="top" horizontal="end">
+                <ion-fab-button (click)="DisplayPaymentPopup(Duration, geolocation.Route.routes[0].distance);" class="wootow-btn" size="small">
+                    <mat-icon class="material-icons text-dark">monetization_on</mat-icon>
+                </ion-fab-button>
+            </ion-fab>
+        </mgl-control>
+        <!-- end Payment Popup -->
+        <!-- Marcador de Origen de la ruta -->
+        <mgl-marker *ngIf="IsRoutePicked" [lngLat]="Origin" [draggable]="false">
+            <mgl-popup (click)="UpdateRouting();" [lngLat]="Origin" [closeButton]="false" [closeOnClick]="false" [offset]="35">
+                {{PlaceOriginAllData.place_name}}
+            </mgl-popup>
+            <ion-fab-button class="wootow-btn" size="small">
+                <mat-icon class="material-icons text-dark">directions_car</mat-icon>
+            </ion-fab-button>
+        </mgl-marker>
+        <!-- Final marcador de Origen -->
+        <!-- Ruta marcada  -->
+        <mgl-layer [layout]="{'line-join': 'round', 'line-cap': 'round'}" [paint]="{'line-color': '#78849E', 'line-width': 2}" id="routing" *ngIf="IsRoutePicked" type="line" [source]="this.Layer"></mgl-layer>
+        <!-- Final de la ruta -->
+        <!-- Menu -->
+        <mgl-control position="top-left">
+            <ion-fab>
+                <ion-fab-button color="default">
+                    <ion-menu-button style="z-index: 1000"></ion-menu-button>
+                </ion-fab-button>
+            </ion-fab>
+        </mgl-control>
+        <!-- Menu -->
+        <!-- Formulario de busqueda -->
+        <mgl-control position="top-right">
+            <div class="space-80"></div>
+            <form style="position: relative; left: -5em !important" class="text-center">
+                <div class="form-group edit">
+                    <mat-form-field appearance="fill" class="w-100">
+                        <mat-label *ngIf="!IsRoutePicked" class="font-16">¿A donde querías llegar?</mat-label>
+                        <mat-label *ngIf="IsRoutePicked" class="font-16">I want to change my route</mat-label>
+                        <input (focus)="DisplaySearchPopup();" matInput>
+                        <mat-icon matSuffix>near_me</mat-icon>
+                    </mat-form-field>
+                </div>
+            </form>
+        </mgl-control>
+        <!-- Fin del formulario -->
+        <!-- Buscarnos mediante el gps -->
+        <mgl-control position="bottom-right">
+            <ion-fab (click)="SearchMylocatioN();" vertical="bottom" horizontal="center">
+                <ion-fab-button style="margin-left: -2em" color="light">
+                    <mat-icon class="material-icons text-dark">gps_fixed</mat-icon>
+                </ion-fab-button>
+            </ion-fab>
+        </mgl-control>
+        <!-- Fin bloque de busqueda GPS -->
+        <!-- Marcador de Destino de la ruta -->
+        <mgl-marker *ngIf="IsRoutePicked" [lngLat]="Destiny" [draggable]="false">
+            <mgl-popup (click)="UpdateRouting();" [lngLat]="Destiny" [closeButton]="false" [closeOnClick]="false" [offset]="35">
+                {{ PlaceDestinyAllData.place_name }}
+            </mgl-popup>
+            <ion-fab-button class="wootow-btn" size="small">
+                <!--<mat-icon class="material-icons text-dark">near_me</mat-icon>-->
+                <img src="./assets/images/tow-destiny.png" alt="Wootow">
+            </ion-fab-button>
+        </mgl-marker>
+        <!-- Final del marcador -->
+        <!-- Tiempo aprox -->
+        <mgl-control *ngIf="IsRoutePicked" position="bottom-left">
+            <mat-card [ngClass]="{'duration-popup': DurationPX}">
+                <mat-card-header>
+                    <mat-hint class="font-bold font-14 text-left">
+                        Tiempo aprox: {{Duration}} min
+                    </mat-hint>
+                </mat-card-header>
+            </mat-card>
+        </mgl-control>
+        <!-- Fin tiempo aprox -->
+    </mgl-map>
 </ion-content>

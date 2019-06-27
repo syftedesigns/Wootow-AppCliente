@@ -1,24 +1,45 @@
 <ion-app>
-  <ion-split-pane>
-    <ion-menu type="overlay">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Menu</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content>
-        <ion-list>
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
-            <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
-              <ion-icon slot="start" [name]="p.icon"></ion-icon>
-              <ion-label>
-                {{p.title}}
-              </ion-label>
-            </ion-item>
-          </ion-menu-toggle>
-        </ion-list>
-      </ion-content>
-    </ion-menu>
-    <ion-router-outlet main></ion-router-outlet>
-  </ion-split-pane>
+    <ion-split-pane>
+        <ion-menu type="overlay" swipeGesture="false">
+            <ion-header>
+                <ion-toolbar class="wootow-bg">
+                    <ion-title>
+                        <img src="./assets/images/logo-xs.png" alt="Wootow logo">
+                    </ion-title>
+                </ion-toolbar>
+                <ion-toolbar padding class="wootow-bg">
+                    <img style="border-radius: 50%" class="w-25" src="./assets/images/demo/1.jpg" alt="">
+                    <mat-hint class="font-bold">
+                        Carlos Velasquez
+                    </mat-hint>
+                </ion-toolbar>
+            </ion-header>
+            <ion-content padding>
+                <ion-list lines="none">
+                    <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
+                        <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
+                            <ion-icon slot="start" [name]="p.icon"></ion-icon>
+                            <ion-label>
+                                {{p.title}}
+                            </ion-label>
+                        </ion-item>
+                        <div class="space-10"></div>
+                    </ion-menu-toggle>
+                </ion-list>
+            </ion-content>
+            <ion-footer>
+                <ion-menu-toggle>
+                    <ion-list lines="none">
+                        <ion-item>
+                            <ion-icon slot="start" name="exit"></ion-icon>
+                            <ion-label>
+                                Salir de la cuenta
+                            </ion-label>
+                        </ion-item>
+                    </ion-list>
+                </ion-menu-toggle>
+            </ion-footer>
+        </ion-menu>
+        <ion-router-outlet main></ion-router-outlet>
+    </ion-split-pane>
 </ion-app>
