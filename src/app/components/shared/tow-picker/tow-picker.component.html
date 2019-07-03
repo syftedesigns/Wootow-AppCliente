@@ -56,7 +56,7 @@
             <div class="space-20"></div>
             <mat-divider></mat-divider>
             <div class="space-20"></div>
-            <ion-button expand="full" class="wootow-btn text-dark">
+            <ion-button (click)="DisplayChargeModal();" expand="full" class="wootow-btn text-dark">
                 <mat-hint *ngIf="this.TruckType1">Confirm Hook truck</mat-hint>
                 <mat-hint *ngIf="this.TruckType2">Confirm Flatbet</mat-hint>
             </ion-button>

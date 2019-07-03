@@ -13,30 +13,30 @@
             <ion-col size="12" align-self="center">
                 <ion-card>
                     <ion-card-content padding>
-                        <form>
+                        <form #customerForm="ngForm" ngNativeValidate (ngSubmit)="UpdateForm(customerForm);">
                             <div class="form-group">
                                 <mat-form-field appearance="fill">
                                     <mat-label>Name</mat-label>
-                                    <input matInput placeholder="Carlos Velasquez">
+                                    <input required [(ngModel)]="auth.Customer.name" name="name" matInput placeholder="i.e John Doe">
                                     <mat-icon matSuffix>person_pin</mat-icon>
                                 </mat-form-field>
                             </div>
                             <div class="form-group">
                                 <mat-form-field appearance="fill">
                                     <mat-label>New Password</mat-label>
-                                    <input type="password" matInput placeholder="********">
+                                    <input required ngModel name="password" type="password" matInput placeholder="********">
                                     <mat-icon matSuffix>lock</mat-icon>
                                 </mat-form-field>
                             </div>
                             <div class="form-group">
                                 <mat-form-field appearance="fill">
                                     <mat-label>Confirm New Password</mat-label>
-                                    <input type="password" matInput placeholder="********">
+                                    <input required ngModel name="password2" type="password" matInput placeholder="********">
                                     <mat-icon matSuffix>mobile_friendly</mat-icon>
                                 </mat-form-field>
                             </div>
                             <div class="form-group">
-                                <ion-button expand="full" shape="round" class="wootow-btn text-dark">
+                                <ion-button type="submit" expand="full" class="wootow-btn text-dark">
                                     Update my account
                                 </ion-button>
                             </div>

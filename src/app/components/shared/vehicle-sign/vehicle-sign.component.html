@@ -15,49 +15,57 @@
                     <ion-card-header *ngIf="withprofile">
                         <ion-slides pager="true" scrollbar="true">
                             <ion-slide>
-                                <img src="./assets/images/demo/toyota-fortuner.jpg" alt="">
-                            </ion-slide>
-                            <ion-slide>
-                                <img src="./assets/images/demo/toyota-fortuner.jpg" alt="">
-                            </ion-slide>
-                            <ion-slide>
-                                <img src="./assets/images/demo/toyota-fortuner.jpg" alt="">
+                                <img *ngIf="!imagePreview && !imageBase64" [src]="ObjectCar.car_images | noImage" [alt]="ObjectCar.car_model_id.car_name">
+                                <img *ngIf="imagePreview && imageBase64" [src]="imagePreview | noImage">
                             </ion-slide>
                         </ion-slides>
+                        <ion-button *ngIf="PlatformType === 'cordova'" (click)="MediaPicker();" expand="full" shape="round" class="wootow-btn text-dark">
+                            Update photo
+                        </ion-button>
+                        <ion-button (click)="TriggerInputFile('webFile');" *ngIf="PlatformType === 'web'" expand="full" shape="round" class="wootow-btn text-dark">
+                            Update photo
+                        </ion-button>
                     </ion-card-header>
                     <ion-card-header *ngIf="!withprofile">
-                        <img src="./assets/images/notavailable-194.jpg" alt="">
-                        <ion-button expand="full" shape="round" class="wootow-btn text-dark">
+                        <img [src]="imagePreview | noImage">
+                        <ion-button *ngIf="PlatformType === 'cordova'" (click)="MediaPicker();" expand="full" shape="round" class="wootow-btn text-dark">
+                            Upload photos
+                        </ion-button>
+                        <ion-button (click)="TriggerInputFile('webFile');" *ngIf="PlatformType === 'web'" expand="full" shape="round" class="wootow-btn text-dark">
                             Upload photos
                         </ion-button>
                     </ion-card-header>
                     <ion-card-content padding>
-                        <form>
+                        <form #formVehicle="ngForm" ngNativeValidate (ngSubmit)="RegisterNewCar(formVehicle);">
                             <div class="form-group">
                                 <mat-form-field appearance="fill" class="w-100">
                                     <mat-label>Vehicle identifier</mat-label>
-                                    <input matInput placeholder="I.E: Toyota">
+                                    <input [(ngModel)]="ObjectCar.car_model_id.car_name" required name="car_name" type="text" matInput placeholder="I.E: Toyota">
                                     <mat-hint>Must be completed to identify you quickly, example, if you have 30 vehicles this will allow to identify you easily</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="form-group">
                                 <mat-form-field appearance="fill" class="w-100">
                                     <mat-label>License plate</mat-label>
-                                    <input matInput>
+                                    <input [(ngModel)]="ObjectCar.car_model_id.car_plate" required name="car_plate" type="text" matInput>
                                     <mat-hint>Put your license plate number so the driver can easily find you once it arrives</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="form-group">
                                 <mat-form-field appearance="fill" class="w-100">
                                     <mat-label>Vehicle Colour</mat-label>
-                                    <input matInput>
+                                    <input [(ngModel)]="ObjectCar.car_model_id.car_colour" required name="car_colour" type="text" matInput>
                                 </mat-form-field>
                             </div>
                             <div class="form-group">
-                                <ion-button class="wootow-btn text-dark" expand="full" shape="round">
+                                <ion-button type="submit" class="wootow-btn text-dark" expand="full">
                                     Sign in Vehicle
                                 </ion-button>
                             </div>
+                            <fieldset style="display:none">
+                                <input (change)="DisplayWebPhoto($event.target.files[0]);" ngModel name="webFile" type="file" id="webFile">
+                                <input type="hidden" [(ngModel)]="auth._id" name="client">
+                            </fieldset>
                         </form>
                     </ion-card-content>
                 </ion-card>

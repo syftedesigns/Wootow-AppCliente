@@ -13,10 +13,27 @@ import { AngularMaterialModule } from './angular-material.module';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { environment } from '../environments/environment';
 import { ServicesModule } from './services/services.module';
+import { NgxStripeModule } from 'ngx-stripe';
 // Cordova
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { PublicComponent } from './components/pages/public/public.component';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
+import { ImagePicker } from '@ionic-native/image-picker/ngx';
+import { Camera } from '@ionic-native/camera/ngx';
+
+// Firebase
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireDatabaseModule, AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { NoImagePipe } from './services/pipes/no-image.pipe';
+import { SharedModule } from './components/shared/shared.module';
+
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    PublicComponent,
+  ],
   entryComponents: [],
   imports: [
     BrowserModule,
@@ -27,12 +44,22 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
     NgxMapboxGLModule.withConfig({
       accessToken: environment.mapbox.token,
     }),
-    ServicesModule
+    ServicesModule,
+    NgxStripeModule.forRoot('pk_test_CAdqELuEhU4gNp3aiTsyyCTD'),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireStorageModule,
+    AngularFireDatabaseModule,
+    AngularFireAuthModule,
+    SharedModule
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Geolocation,
+    NativeStorage,
+    AngularFireDatabase,
+    ImagePicker,
+    Camera,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

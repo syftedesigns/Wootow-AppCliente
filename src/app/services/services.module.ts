@@ -5,6 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { GeolocationService } from './map/geolocation.service';
 import { GlobalService } from './global/global.service';
 import { AngularMaterialModule } from '../angular-material.module';
+import { AuthService } from './auth/auth.service';
+import { VehicleService } from './auth/vehicle.service';
 
 @NgModule({
   declarations: [],
@@ -16,7 +18,9 @@ import { AngularMaterialModule } from '../angular-material.module';
   ],
   providers: [
     GeolocationService,
-    GlobalService
+    GlobalService,
+    AuthService,
+    VehicleService
   ]
 })
 export class ServicesModule { }

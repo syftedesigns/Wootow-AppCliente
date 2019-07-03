@@ -13,8 +13,8 @@
             <ion-col align-self="center" size="12">
                 <ion-card>
                     <ion-card-header>
-                        <img class="r-50 w-50 offset-3" src="./assets/images/demo/1.jpg">
-                        <ion-fab vertical="top" horizontal="end">
+                        <img class="r-50 w-50 offset-3" [src]="auth.Customer.picture | noImage:'./assets/images/picture.png'">
+                        <ion-fab *ngIf="auth.GivePlatformInfo() === 'cordova'" vertical="top" horizontal="end">
                             <ion-fab-button (click)="GalleryControllerFunction();" class="wootow-btn">
                                 <ion-icon class="text-default" name="camera"></ion-icon>
                             </ion-fab-button>
@@ -25,7 +25,7 @@
                             <ion-col>
                                 <p>
                                     <mat-hint class="text-default">
-                                        Cesar Silva <br> +51 0000000 <br> lycp@gmail.com
+                                        {{auth.Customer.name}} <br> {{auth.Customer.phone}} <br> {{auth.Customer.email}}
                                     </mat-hint>
                                 </p>
                             </ion-col>
@@ -38,12 +38,13 @@
                     </ion-card-content>
                 </ion-card>
                 <ion-card>
-                    <ion-card-header>
-                        <ion-card-title style="font-size: 14px !important; display:none ">
+                    <mat-spinner class="text-center offset-4" *ngIf="isLoading"></mat-spinner>
+                    <ion-card-header *ngIf="NotItems">
+                        <ion-card-title style="font-size: 14px !important;">
                             <mat-hint>
                                 No tienes vehiculos registrados
                             </mat-hint>
-                            <ion-button class="wootow-btn text-default" expand="full" shape="round">
+                            <ion-button (click)="OpenVehiclePage(null, 'create');" class="wootow-btn text-default" expand="full" shape="round">
                                 Registrar mi primer vehiculo
                             </ion-button>
                         </ion-card-title>
@@ -53,23 +54,23 @@
                             Mis Vehiculos
                         </ion-title>
                     </ion-card-header>
-                    <ion-card-content>
+                    <ion-card-content *ngIf="ArrayCars.length >= 1">
                         <ion-fab vertical="top" horizontal="end">
-                            <ion-fab-button (click)="OpenVehiclePage(false);" class="wootow-btn">
+                            <ion-fab-button (click)="OpenVehiclePage(null, 'create');" class="wootow-btn">
                                 <ion-icon name="add"></ion-icon>
                             </ion-fab-button>
                         </ion-fab>
                         <ion-slides pager="true" scrollbar="true">
-                            <ion-slide>
+                            <ion-slide *ngFor="let car of ArrayCars; let i = index">
                                 <ion-card no-border>
                                     <ion-card-header>
-                                        <img src="./assets/images/demo/toyota-fortuner.jpg">
+                                        <img [alt]="car.car_model.car_name" [src]="car.car_image">
                                     </ion-card-header>
                                     <ion-card-content padding>
                                         <ion-list lines="none">
                                             <ion-item>
                                                 <ion-label class="offset-1 text-center">
-                                                    Toyota Fortuner <br> 1ATERX <br> Blanco
+                                                    {{car.car_model.car_name}} <br> {{car.car_model.car_plate}} <br> {{car.car_model.car_colour}}
                                                 </ion-label>
                                             </ion-item>
                                         </ion-list>
@@ -78,44 +79,12 @@
                                         <ion-toolbar no-border>
                                             <ion-row align="center">
                                                 <ion-col>
-                                                    <ion-button (click)="OpenVehiclePage(true);" class="wootow-btn" expand="full" shape="fill">
+                                                    <ion-button (click)="OpenVehiclePage(car, 'update', true);" class="wootow-btn" expand="full" shape="fill">
                                                         <ion-icon class="text-default" name="create"></ion-icon>
                                                     </ion-button>
                                                 </ion-col>
                                                 <ion-col>
-                                                    <ion-button class="btn-delete" color="warning" expand="full" shape="fill">
-                                                        <ion-icon name="trash"></ion-icon>
-                                                    </ion-button>
-                                                </ion-col>
-                                            </ion-row>
-                                        </ion-toolbar>
-                                    </ion-footer>
-                                </ion-card>
-                            </ion-slide>
-                            <ion-slide>
-                                <ion-card no-border>
-                                    <ion-card-header>
-                                        <img src="./assets/images/demo/special.webp">
-                                    </ion-card-header>
-                                    <ion-card-content padding>
-                                        <ion-list lines="none">
-                                            <ion-item>
-                                                <ion-label class="offset-1 text-center">
-                                                    Lamborghini <br> 1ATERX <br> Negro
-                                                </ion-label>
-                                            </ion-item>
-                                        </ion-list>
-                                    </ion-card-content>
-                                    <ion-footer>
-                                        <ion-toolbar no-border>
-                                            <ion-row align="center">
-                                                <ion-col>
-                                                    <ion-button (click)="OpenVehiclePage(true);" class="wootow-btn" expand="full" shape="fill">
-                                                        <ion-icon class="text-default" name="create"></ion-icon>
-                                                    </ion-button>
-                                                </ion-col>
-                                                <ion-col>
-                                                    <ion-button class="btn-delete" color="warning" expand="full" shape="fill">
+                                                    <ion-button (click)="DisplayAlertOptions(i, car);" class="btn-delete" color="warning" expand="full" shape="fill">
                                                         <ion-icon name="trash"></ion-icon>
                                                     </ion-button>
                                                 </ion-col>

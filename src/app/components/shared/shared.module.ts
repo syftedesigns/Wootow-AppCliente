@@ -10,6 +10,11 @@ import { RouterModule } from '@angular/router';
 import { ExplorerComponent } from './explorer/explorer.component';
 import { BudgetComponent } from './budget/budget.component';
 import { TowPickerComponent } from './tow-picker/tow-picker.component';
+import { CardComponent } from './card/card.component';
+import { NgxStripeModule } from 'ngx-stripe';
+import { LoginPopupComponent } from './auth/login/login.component';
+import { SignUpComponent } from './auth/sign-up/sign-up.component';
+import { NoImagePipe } from '../../services/pipes/no-image.pipe';
 
 @NgModule({
   declarations: [
@@ -18,7 +23,11 @@ import { TowPickerComponent } from './tow-picker/tow-picker.component';
     VehicleSignComponent,
     ExplorerComponent,
     BudgetComponent,
-    TowPickerComponent
+    TowPickerComponent,
+    CardComponent,
+    LoginPopupComponent,
+    SignUpComponent,
+    NoImagePipe
   ],
   entryComponents: [
     AddressComponent,
@@ -26,7 +35,10 @@ import { TowPickerComponent } from './tow-picker/tow-picker.component';
     VehicleSignComponent,
     ExplorerComponent,
     BudgetComponent,
-    TowPickerComponent
+    TowPickerComponent,
+    CardComponent,
+    LoginPopupComponent,
+    SignUpComponent,
   ],
   exports: [
     AddressComponent,
@@ -34,14 +46,19 @@ import { TowPickerComponent } from './tow-picker/tow-picker.component';
     VehicleSignComponent,
     ExplorerComponent,
     BudgetComponent,
-    TowPickerComponent
+    TowPickerComponent,
+    CardComponent,
+    LoginPopupComponent,
+    SignUpComponent,
+    NoImagePipe
   ],
   imports: [
     CommonModule,
     IonicModule,
     AngularMaterialModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    NgxStripeModule.forRoot('pk_test_CAdqELuEhU4gNp3aiTsyyCTD'),
   ]
 })
 export class SharedModule { }

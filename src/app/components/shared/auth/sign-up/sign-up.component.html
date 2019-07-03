@@ -1,0 +1,77 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="modal.dismiss();" icon-only>
+                <ion-icon name="arrow-round-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+    <ion-grid>
+        <ion-row align="center">
+            <ion-col size="12" align-self="center">
+                <ion-card>
+                    <ion-card-header>
+                        <ion-img class="w-50 offset-3" src="./assets/images/gancho-lg.png" alt="wootow we lif it logo"></ion-img>
+                        <div class="space-30"></div>
+                        <ion-card-title>
+                            <mat-hint>
+                                Sign up into wootow
+                            </mat-hint>
+                        </ion-card-title>
+                    </ion-card-header>
+                    <div class="space-30"></div>
+                    <ion-card-content>
+                        <form #signForm="ngForm" ngNativeValidate (ngSubmit)="SignUpNewCustomer(signForm);">
+                            <div class="form-group">
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <mat-label>Your name</mat-label>
+                                    <input type="text" required name="name" ngModel matInput placeholder="i.e: John Doe">
+                                    <mat-icon matSuffix class="material-icons">account_box</mat-icon>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-group">
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <mat-label>Email</mat-label>
+                                    <input type="email" required name="email" ngModel matInput placeholder="i.e: email@example.com">
+                                    <mat-icon matSuffix class="material-icons">contact_mail</mat-icon>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-group">
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <mat-label>Phone number</mat-label>
+                                    <input type="number" required name="phone" ngModel matInput placeholder="i.e: +1 0000000000">
+                                    <mat-icon matSuffix class="material-icons">stay_current_portrait</mat-icon>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-group">
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <mat-label>Password</mat-label>
+                                    <input type="password" required name="password" ngModel matInput placeholder="*******">
+                                    <mat-icon matSuffix class="material-icons">lock</mat-icon>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-group">
+                                <ion-button type="submit" class="wootow-btn text-dark" expand="full">
+                                    Request my service now
+                                </ion-button>
+                                <div class="space-15"></div>
+                                <mat-hint class="font-12">
+                                    If you sign up you are accepting our <b>terms of services and conditions</b>
+                                </mat-hint>
+                            </div>
+                        </form>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+<ion-footer no-border traslucent>
+    <ion-toolbar traslucent class="default-bg">
+        <ion-title class="text-center" style="font-size: 14px !important">
+            Want to driver
+        </ion-title>
+    </ion-toolbar>
+</ion-footer>

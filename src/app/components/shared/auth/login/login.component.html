@@ -1,0 +1,59 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="modal.dismiss();" icon-only>
+                <ion-icon name="arrow-round-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content fullscreen scrollY="false">
+    <ion-grid>
+        <ion-row align="center">
+            <ion-col size="12" align-self="center">
+                <ion-card>
+                    <ion-card-header>
+                        <ion-img class="w-50 offset-3" src="./assets/images/gancho-lg.png" alt="wootow we lif it logo"></ion-img>
+                        <div class="space-30"></div>
+                        <ion-card-title>
+                            <mat-hint>
+                                Login into your account
+                            </mat-hint>
+                        </ion-card-title>
+                    </ion-card-header>
+                    <div class="space-30"></div>
+                    <ion-card-content>
+                        <form ngNativeValidate #logginForm="ngForm" (ngSubmit)="LoginCustomer(logginForm);">
+                            <div class="form-group">
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <mat-label>Your email</mat-label>
+                                    <input required name="email" ngModel type="email" matInput>
+                                    <mat-icon matSuffix class="material-icons">contact_mail</mat-icon>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-group">
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <mat-label>Password</mat-label>
+                                    <input required name="password" ngModel type="password" matInput>
+                                    <mat-icon matSuffix class="material-icons">lock</mat-icon>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-group">
+                                <ion-button type="submit" class="wootow-btn text-dark" expand="full">
+                                    Login
+                                </ion-button>
+                            </div>
+                        </form>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+<ion-footer no-border traslucent>
+    <ion-toolbar traslucent class="default-bg">
+        <ion-title class="text-center" style="font-size: 14px !important">
+            Want to driver
+        </ion-title>
+    </ion-toolbar>
+</ion-footer>

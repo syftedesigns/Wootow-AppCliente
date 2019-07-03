@@ -4,28 +4,38 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Platform } from '@ionic/angular';
 import { ObjectCoords } from '../../classes/coords.class';
 import { GlobalService } from '../global/global.service';
-import { MAPBOX_SEARCH_API, MAPBOX_SEARCH_FILTERS1, MAPBOX_SEARCH_FILTERS2, MAPBOX_DIRECTIONS_API } from 'src/app/global/API.config';
+import { MAPBOX_SEARCH_API, MAPBOX_DIRECTIONS_API } from 'src/app/global/API.config';
 import { environment } from 'src/environments/environment';
 import { map, catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 import { MatSnackBar } from '@angular/material';
+import { AngularFireDatabase } from '@angular/fire/database';
+import { AuthService } from '../auth/auth.service';
 @Injectable({
   providedIn: 'root'
 })
 export class GeolocationService {
   public currentPosition: ObjectCoords = null;
   public Route: any = null;
+  public layer: any = null;
+  public FirebaseMapLoader: boolean = false;
   // tslint:disable-next-line:variable-name
   constructor(private _http: HttpClient, private geolocation: Geolocation,
               private platform: Platform, private global: GlobalService,
-              private snackBar: MatSnackBar) {
-                this.GetCurrentPosition();
+              private snackBar: MatSnackBar, private db: AngularFireDatabase,
+              private auth: AuthService) {
+                this.GetCurrentPosition().then((data) => {
+                  if (data !== null) {
+                    this.currentPosition = data;
+                  }
+                });
               }
 
   GetCurrentPosition(): Promise<ObjectCoords> {
     return new Promise((resolve, reject) => {
       if (this.GetPlatform()) {
         console.log('cordova');
+        this.snackBar.open('Cordova');
         // Si es cordova entonces lo obtenemos mediante el gps
         this.geolocation.getCurrentPosition().then(
           (gps) => {
@@ -120,5 +130,35 @@ export class GeolocationService {
         return new Observable<string | boolean>();
       })
     );
+  }
+
+  // Guardar un servicio en Firebase para luego retornarlo en el mapa
+  SaveServiceToFirebase(ObjectService: any): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.db.object(`/services/${ObjectService.key}`)
+        .update(ObjectService).then(
+          () => {
+            resolve(true);
+          }, (err) => {
+            this.global.snackBar.open('Failure to insert in firebase', null, {
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              duration: 5000
+            });
+            throw new Error(JSON.stringify(err));
+          }
+        );
+    });
+  }
+  // Retornar los servicios segun mi ID
+  ReturnServicesFromFirebase() {
+    return this.db.list('services', ref =>
+    ref.orderByChild('customer/_id')
+    .equalTo(this.auth._id)).valueChanges()
+    .pipe(
+      map((objectPost: any) => {
+          return objectPost;
+    })
+  );
   }
 }

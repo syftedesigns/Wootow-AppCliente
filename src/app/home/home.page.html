@@ -1,26 +1,17 @@
 <ion-content scrollY="false">
-    <mgl-map [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="[14]" [center]="[CurrentPosition.longitude, CurrentPosition.latitude]">
-        <!-- Payment Popup -->
-        <mgl-control *ngIf="IsRoutePicked" position="top-right">
-            <ion-fab vertical="top" horizontal="end">
-                <ion-fab-button (click)="DisplayPaymentPopup(Duration, geolocation.Route.routes[0].distance);" class="wootow-btn" size="small">
-                    <mat-icon class="material-icons text-dark">monetization_on</mat-icon>
-                </ion-fab-button>
-            </ion-fab>
-        </mgl-control>
-        <!-- end Payment Popup -->
+    <mgl-map (load)="Map = $event;" *ngIf="RenderMap" [style]="'mapbox://styles/ingcarlose/cjx26bahhjpzy1cls7s5d3pnf'" [zoom]="[14]" [center]="[CurrentPosition.longitude, CurrentPosition.latitude]">
         <!-- Marcador de Origen de la ruta -->
         <mgl-marker *ngIf="IsRoutePicked" [lngLat]="Origin" [draggable]="false">
             <mgl-popup (click)="UpdateRouting();" [lngLat]="Origin" [closeButton]="false" [closeOnClick]="false" [offset]="35">
                 {{PlaceOriginAllData.place_name}}
             </mgl-popup>
-            <ion-fab-button class="wootow-btn" size="small">
-                <mat-icon class="material-icons text-dark">directions_car</mat-icon>
+            <ion-fab-button color="dark" size="small">
+                <mat-icon class="material-icons text-white">directions_car</mat-icon>
             </ion-fab-button>
         </mgl-marker>
         <!-- Final marcador de Origen -->
         <!-- Ruta marcada  -->
-        <mgl-layer [layout]="{'line-join': 'round', 'line-cap': 'round'}" [paint]="{'line-color': '#78849E', 'line-width': 2}" id="routing" *ngIf="IsRoutePicked" type="line" [source]="this.Layer"></mgl-layer>
+        <!--<mgl-layer [layout]="{'line-join': 'round', 'line-cap': 'round'}" [paint]="{'line-color': '#78849E', 'line-width': 2}" id="routing" *ngIf="IsRoutePicked" type="line" [source]="this.Layer"></mgl-layer>-->
         <!-- Final de la ruta -->
         <!-- Menu -->
         <mgl-control position="top-left">
@@ -32,7 +23,7 @@
         </mgl-control>
         <!-- Menu -->
         <!-- Formulario de busqueda -->
-        <mgl-control position="top-right">
+        <mgl-control *ngIf="!geolocation.FirebaseMapLoader" position="top-right">
             <div class="space-80"></div>
             <form style="position: relative; left: -5em !important" class="text-center">
                 <div class="form-group edit">
@@ -77,5 +68,14 @@
             </mat-card>
         </mgl-control>
         <!-- Fin tiempo aprox -->
+        <!-- Payment Popup -->
+        <mgl-control *ngIf="IsRoutePicked && !geolocation.FirebaseMapLoader" position="bottom-left">
+            <ion-fab vertical="bottom" horizontal="center">
+                <ion-fab-button style="margin-left: 2em" (click)="DisplayPaymentPopup(Duration, geolocation.Route.routes[0].distance);" class="wootow-btn">
+                    <mat-icon class="material-icons text-dark">touch_app</mat-icon>
+                </ion-fab-button>
+            </ion-fab>
+        </mgl-control>
+        <!-- end Payment Popup -->
     </mgl-map>
 </ion-content>

@@ -1,16 +1,16 @@
 <ion-app>
     <ion-split-pane>
-        <ion-menu type="overlay" swipeGesture="false">
+        <ion-menu *ngIf="auth.isLogged();" type="overlay" swipeGesture="false">
             <ion-header>
                 <ion-toolbar class="wootow-bg">
-                    <ion-title>
+                    <ion-title class="text-center">
                         <img src="./assets/images/logo-xs.png" alt="Wootow logo">
                     </ion-title>
                 </ion-toolbar>
-                <ion-toolbar padding class="wootow-bg">
-                    <img style="border-radius: 50%" class="w-25" src="./assets/images/demo/1.jpg" alt="">
+                <ion-toolbar [routerLink]="['/profile']" padding class="wootow-bg">
+                    <img style="border-radius: 50%" class="w-25" [src]="auth.Customer.picture | noImage:'./assets/images/picture.png'" [alt]="auth.Customer.name">
                     <mat-hint class="font-bold">
-                        Carlos Velasquez
+                        {{auth.Customer.name}}
                     </mat-hint>
                 </ion-toolbar>
             </ion-header>
@@ -30,7 +30,7 @@
             <ion-footer>
                 <ion-menu-toggle>
                     <ion-list lines="none">
-                        <ion-item>
+                        <ion-item (click)="auth.Logout();">
                             <ion-icon slot="start" name="exit"></ion-icon>
                             <ion-label>
                                 Salir de la cuenta

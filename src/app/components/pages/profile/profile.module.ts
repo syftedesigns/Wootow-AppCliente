@@ -25,6 +25,8 @@ const routes: Routes = [
     AngularMaterialModule,
     SharedModule
   ],
-  declarations: [ProfilePage]
+  declarations: [
+    ProfilePage,
+  ]
 })
 export class ProfilePageModule {}

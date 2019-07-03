@@ -1,0 +1,42 @@
+<ion-content fullscreen="true" class="default-bg">
+    <ion-grid>
+        <ion-row align="center">
+            <ion-col size="12" align-self="center">
+                <div class="space-50"></div>
+                <ion-card no-border padding>
+                    <div class="space-50"></div>
+                    <ion-card-header>
+                        <ion-img class="w-50 offset-3" src="./assets/images/logo-login.png" alt="wootow app we lift your car"></ion-img>
+                        <div class="space-30"></div>
+                        <ion-card-title>
+                            <mat-hint style="font-size: 22px !important">
+                                We lift it
+                            </mat-hint>
+                        </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content padding>
+                        <ion-row>
+                            <ion-col>
+                                <ion-button (click)="openLogin()" expand="full" color="light">
+                                    Login
+                                </ion-button>
+                            </ion-col>
+                            <ion-col>
+                                <ion-button (click)="openSignUp()" expand="full" color="light">
+                                    Sign up
+                                </ion-button>
+                            </ion-col>
+                        </ion-row>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+<ion-footer no-border traslucent>
+    <ion-toolbar traslucent class="default-bg">
+        <ion-title class="text-center" style="font-size: 14px !important">
+            Want to driver
+        </ion-title>
+    </ion-toolbar>
+</ion-footer>
