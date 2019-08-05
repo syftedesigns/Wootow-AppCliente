@@ -104,21 +104,22 @@ export class TowPickerComponent implements OnInit {
       chargeModal.onDidDismiss().then(
         async (charge) => {
           if (charge.role === 'paid') {
-            console.log(charge);
+            // console.log(charge);
             this.FirebaseObject.pay = {
                token: charge.data.token,
-               price: charge.data.data.price
+               price: charge.data.data.price,
+               extraInfo: charge.data.extraInfo
             };
+            console.log(this.FirebaseObject);
             setTimeout(async () => {
-              console.log(this.FirebaseObject);
               // Insertamos el registro en firebase
               if (await this.map.SaveServiceToFirebase(this.FirebaseObject)) {
                 this.geolocation.FirebaseMapLoader = true;
-                console.log('Hizo el pago y el servicio fue almacenado');
+                alert('Hizo el pago y el servicio fue almacenado');
               } else {
                 return;
               }
-            }, 500);
+            }, 3000);
           }
         }
       );

@@ -7,6 +7,7 @@ import { GlobalService } from './global/global.service';
 import { AngularMaterialModule } from '../angular-material.module';
 import { AuthService } from './auth/auth.service';
 import { VehicleService } from './auth/vehicle.service';
+import { PushService } from './auth/push.service';
 
 @NgModule({
   declarations: [],
@@ -20,7 +21,8 @@ import { VehicleService } from './auth/vehicle.service';
     GeolocationService,
     GlobalService,
     AuthService,
-    VehicleService
+    VehicleService,
+    PushService
   ]
 })
 export class ServicesModule { }

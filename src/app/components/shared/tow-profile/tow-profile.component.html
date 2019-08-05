@@ -1,0 +1,88 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons>
+            <ion-button (click)="modal.dismiss();" icon-only slot="start">
+                <ion-icon name="arrow-round-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title class="text-center">
+            <img src="./assets/images/logo-xs.png" alt="Wootow brand Logo">
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-grid>
+        <ion-row align="center">
+            <ion-col align-self="center" size="12">
+                <mat-tab-group>
+                    <mat-tab label="Provider">
+                        <ion-card>
+                            <ion-header>
+                                <ion-img class="w-50 offset-3" title="customer name" src="./assets/images/no_profile_image.png" alt="customer name"></ion-img>
+                            </ion-header>
+                            <ion-card-content padding>
+                                <div class="space-15"></div>
+                                <mat-divider></mat-divider>
+                                <div class="space-15"></div>
+                                <mat-hint>
+                                    <h2>Carlos Estarita</h2>
+                                </mat-hint>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-chip color="wootow">
+                                            <mat-icon class="material-icons">directions_car</mat-icon>&nbsp;Tow Plate:
+                                        </ion-chip>
+                                    </ion-col>
+                                    <ion-col>
+                                        <mat-hint>
+                                            0737TTXAR
+                                        </mat-hint>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-chip color="wootow">
+                                            <mat-icon class="material-icons">directions_car</mat-icon>&nbsp;Tow Identifier:
+                                        </ion-chip>
+                                    </ion-col>
+                                    <ion-col>
+                                        <mat-hint>
+                                            1956 FORD F-100 Truck
+                                        </mat-hint>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-chip color="wootow">
+                                            <mat-icon class="material-icons">phone</mat-icon>&nbsp; Phone:
+                                        </ion-chip>
+                                    </ion-col>
+                                    <ion-col>
+                                        <mat-hint>
+                                            5454045484
+                                        </mat-hint>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-button expand="full" class="wootow-btn text-dark" shape="round">
+                                            Llamar
+                                        </ion-button>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-button expand="full" class="wootow-btn text-dark" shape="round">
+                                            Enviar mensaje
+                                        </ion-button>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-card-content>
+                        </ion-card>
+                    </mat-tab>
+                    <mat-tab label="Tracking Map">
+                        <h4>Coming soon</h4>
+                    </mat-tab>
+                </mat-tab-group>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

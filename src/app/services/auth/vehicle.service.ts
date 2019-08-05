@@ -49,7 +49,7 @@ export class VehicleService {
       // Putstring, para inyectar la imagen en el storage
       const upload: firebase.storage.UploadTask = StorageRef
         .child(`${folderName}/${filename}`)
-        .putString(btoa(image64), 'base64', {contentType: 'image/jpeg'});
+        .putString(image64, 'base64', {contentType: 'image/jpeg'});
         // Verificamos si hizo el upload
       upload.on(firebase.storage.TaskEvent.STATE_CHANGED,
                 (value) => {

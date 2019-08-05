@@ -20,6 +20,9 @@ import { PublicComponent } from './components/pages/public/public.component';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+import { OneSignal } from '@ionic-native/onesignal/ngx';
+import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 
 // Firebase
 import { AngularFireModule } from '@angular/fire';
@@ -60,6 +63,9 @@ import { SharedModule } from './components/shared/shared.module';
     AngularFireDatabase,
     ImagePicker,
     Camera,
+    BackgroundMode,
+    OneSignal,
+    LaunchNavigator,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

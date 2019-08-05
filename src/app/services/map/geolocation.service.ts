@@ -11,6 +11,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { MatSnackBar } from '@angular/material';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AuthService } from '../auth/auth.service';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 @Injectable({
   providedIn: 'root'
 })
@@ -20,10 +21,10 @@ export class GeolocationService {
   public layer: any = null;
   public FirebaseMapLoader: boolean = false;
   // tslint:disable-next-line:variable-name
-  constructor(private _http: HttpClient, private geolocation: Geolocation,
+  constructor(private _http: HttpClient, public geolocation: Geolocation,
               private platform: Platform, private global: GlobalService,
               private snackBar: MatSnackBar, private db: AngularFireDatabase,
-              private auth: AuthService) {
+              private auth: AuthService, public background: BackgroundMode) {
                 this.GetCurrentPosition().then((data) => {
                   if (data !== null) {
                     this.currentPosition = data;
@@ -35,7 +36,6 @@ export class GeolocationService {
     return new Promise((resolve, reject) => {
       if (this.GetPlatform()) {
         console.log('cordova');
-        this.snackBar.open('Cordova');
         // Si es cordova entonces lo obtenemos mediante el gps
         this.geolocation.getCurrentPosition().then(
           (gps) => {
@@ -135,7 +135,7 @@ export class GeolocationService {
   // Guardar un servicio en Firebase para luego retornarlo en el mapa
   SaveServiceToFirebase(ObjectService: any): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      this.db.object(`/services/${ObjectService.key}`)
+      this.db.object(`services/${ObjectService.key}`)
         .update(ObjectService).then(
           () => {
             resolve(true);
@@ -158,7 +158,42 @@ export class GeolocationService {
     .pipe(
       map((objectPost: any) => {
           return objectPost;
+    }),
+    catchError( (err: any)  => {
+      console.error(err);
+      this.snackBar.open('Ops! We have problems to process your data. Please try again', null, {
+        duration: 5000,
+        panelClass: ['red-snackbar']
+      });
+      return new Observable<string | boolean>();
     })
   );
+  }
+    // Actualizar la base de datos, para introducir el tracking, status y datos del conductor
+   // Una vez que es aceptado el servicio
+   // KeyNode: Id del nodo a actualizar, DataToUpdate: Objeto a insertar dentro de la db
+   // El objeto debe contener, datos del conductor, Tracking del servicio
+   UpdateFirebaseService(dataToUpdate: any, nodeRoute: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.db.object(nodeRoute).update(dataToUpdate)
+       .then( () => {
+         resolve(true);
+       }, (err) => {
+         console.error(err);
+         resolve(false);
+       });
+    });
+  }
+     /*
+   Función que nos retorna un booleano en caso de que la aplicación este en segundo plano
+   */
+  IsBackground(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      if (this.background.isActive()) { // Si la app queda en segundo plano, se activa
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
   }
 }

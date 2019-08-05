@@ -12,9 +12,14 @@ export const environment = {
     authDomain: 'wootow-1537559306941.firebaseapp.com',
     databaseURL: 'https://wootow-1537559306941.firebaseio.com',
     projectId: 'wootow-1537559306941',
-    storageBucket: 'gs://wootow-1537559306941.appspot.com/',
+    storageBucket: 'wootow-1537559306941.appspot.com',
     messagingSenderId: '321851810301',
-    appId: '1:321851810301:web:421a8b25bbb4ef10'
+    appId: '1:321851810301:web:ca52ccc4b3f3f29d'
+  },
+  oneSignal: {
+    token: 'a1da1802-8ed8-4f65-99a3-3b1aa6fa37ab',
+    android: '1090236473786',
+    testingUser: 'e1979f19-88cb-48c4-b80d-ab8d3d5d45f4'
   }
 };
 

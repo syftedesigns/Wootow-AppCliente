@@ -15,6 +15,8 @@ import { NgxStripeModule } from 'ngx-stripe';
 import { LoginPopupComponent } from './auth/login/login.component';
 import { SignUpComponent } from './auth/sign-up/sign-up.component';
 import { NoImagePipe } from '../../services/pipes/no-image.pipe';
+import { TowProfileComponent } from './tow-profile/tow-profile.component';
+import { ReviewComponent } from './review/review.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { NoImagePipe } from '../../services/pipes/no-image.pipe';
     CardComponent,
     LoginPopupComponent,
     SignUpComponent,
-    NoImagePipe
+    NoImagePipe,
+    TowProfileComponent,
+    ReviewComponent
   ],
   entryComponents: [
     AddressComponent,
@@ -39,6 +43,8 @@ import { NoImagePipe } from '../../services/pipes/no-image.pipe';
     CardComponent,
     LoginPopupComponent,
     SignUpComponent,
+    TowProfileComponent,
+    ReviewComponent
   ],
   exports: [
     AddressComponent,
@@ -50,7 +56,9 @@ import { NoImagePipe } from '../../services/pipes/no-image.pipe';
     CardComponent,
     LoginPopupComponent,
     SignUpComponent,
-    NoImagePipe
+    NoImagePipe,
+    TowProfileComponent,
+    ReviewComponent
   ],
   imports: [
     CommonModule,

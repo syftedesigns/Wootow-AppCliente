@@ -35,7 +35,6 @@ export class AuthService {
       // Storage native
       this.storage.getItem('sessionCustomer').then(
         (mobileStorage) => {
-          this.matSnack.open(JSON.stringify(mobileStorage));
           if (mobileStorage !== '' && mobileStorage !== undefined && mobileStorage !== null) {
             this.Customer = JSON.parse(mobileStorage);
             this._id = this.Customer._id;

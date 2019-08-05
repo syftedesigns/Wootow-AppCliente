@@ -12,6 +12,9 @@ export class ObjectCustomerClass {
         // tslint:disable-next-line:variable-name
         public __v?: number,
         public token?: string,
-        public picture?: string
+        public picture?: string,
+        public currentLat?: number,
+        public currentLng?: number,
+        public AppPlayerId?: string,
     ) {}
 }

@@ -37,7 +37,18 @@
                                 </mat-form-field>
                             </div>
                             <div class="form-group">
-                                <button class="btn-block" type="submit" mat-raised-button color="primary">Confirm Payment</button>
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <mat-select required name="vehicle" ngModel placeholder="i.e: Chevrolet Optra">
+                                        <mat-option *ngFor="let vehicles of VehiclesRegistered; let i = index" [value]="i">
+                                            {{vehicles.car_model.car_name}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-icon (click)="NavigateToProfile();" class="material-icons" matSuffix>control_point</mat-icon>
+                                    <mat-hint>Indicate which vehicle you are in and are requesting the service so that the driver can quickly locate you</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-group">
+                                <button [disabled]="charge.invalid" class="btn-block" type="submit" mat-raised-button color="primary">Confirm Payment</button>
                             </div>
                         </form>
                     </ion-card-content>
