@@ -12,6 +12,10 @@ ion-item>* {
     color: #636363 !important
 }
 
+.transparent-chip {
+    --background: transparent !important
+}
+
 .edit>.mat-form-field-appearance-fill .mat-form-field-flex {
     background: rgba(255, 255, 255, 0.6) !important;
 }

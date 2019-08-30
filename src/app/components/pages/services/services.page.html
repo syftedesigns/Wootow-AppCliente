@@ -1,9 +1,59 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>services</ion-title>
-  </ion-toolbar>
+    <ion-toolbar class="wootow-bg">
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title class="text-center">
+            Services Completed
+        </ion-title>
+    </ion-toolbar>
 </ion-header>
-
-<ion-content>
-
+<ion-content [ngClass]="{'bg-default': HaveServicesInList}">
+    <ion-grid [ngClass]="{'bg-default': HaveServicesInList}">
+        <ion-row align="center">
+            <ion-col *ngFor="let track of ServicesCompleted" align-self="center" size="12">
+                <ion-card (click)="ModalTrackService(track);" class="bg-light">
+                    <ion-card-header>
+                        <img width="600" [src]="track.srcMap" [alt]="track.srcMap">
+                    </ion-card-header>
+                    <ion-card-content>
+                        <ion-row>
+                            <ion-col size="6">
+                                <ion-list lines="none">
+                                    <ion-item>
+                                        <mat-icon class="material-icons pin-yellow">room</mat-icon>
+                                        <ion-label style="font-size: 12px !important" text-wrap>
+                                            {{track.places.origin.text}}
+                                        </ion-label>
+                                    </ion-item>
+                                </ion-list>
+                            </ion-col>
+                            <ion-col size="6">
+                                <ion-list lines="none">
+                                    <ion-item>
+                                        <mat-icon class="material-icons pin-blue">room</mat-icon>
+                                        <ion-label style="font-size: 12px !important" text-wrap>
+                                            {{track.places.destiny.text}}
+                                        </ion-label>
+                                    </ion-item>
+                                </ion-list>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col size="6">
+                                <ion-chip class="text-center" color="primary">
+                                    <ion-label>Amount paid: $ {{track.prices.Service}}</ion-label>
+                                </ion-chip>
+                            </ion-col>
+                            <ion-col size="6">
+                                <ion-chip class="text-center" color="primary">
+                                    <ion-label>Miles {{track.prices.Miles}}</ion-label>
+                                </ion-chip>
+                            </ion-col>
+                        </ion-row>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>

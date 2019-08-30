@@ -8,10 +8,16 @@
                     </ion-title>
                 </ion-toolbar>
                 <ion-toolbar [routerLink]="['/profile']" padding class="wootow-bg">
-                    <img style="border-radius: 50%" class="w-25" [src]="auth.Customer.picture | noImage:'./assets/images/picture.png'" [alt]="auth.Customer.name">
-                    <mat-hint class="font-bold">
-                        {{auth.Customer.name}}
-                    </mat-hint>
+                    <ion-chip class="text-center offset-2 transparent-chip">
+                        <ion-avatar>
+                            <img [src]="auth.Customer.picture | noImage:'./assets/images/picture.png'" [alt]="auth.Customer.name">
+                        </ion-avatar>
+                        <ion-label>
+                            <mat-hint class="font-bold">
+                                {{auth.Customer.name}}
+                            </mat-hint>
+                        </ion-label>
+                    </ion-chip>
                 </ion-toolbar>
             </ion-header>
             <ion-content padding>
@@ -33,7 +39,7 @@
                         <ion-item (click)="auth.Logout();">
                             <ion-icon slot="start" name="exit"></ion-icon>
                             <ion-label>
-                                Salir de la cuenta
+                                Logout
                             </ion-label>
                         </ion-item>
                     </ion-list>

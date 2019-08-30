@@ -20,22 +20,22 @@ export class AppComponent {
       icon: 'home'
     },
     {
-      title: 'Perfil',
+      title: 'Profile',
       url: '/profile',
       icon: 'contact'
     },
     {
-      title: 'Ayuda',
+      title: 'Help',
       url: '/help',
       icon: 'help-circle'
     },
     {
-      title: 'Pago',
-      url: '/payments',
+      title: 'Services',
+      url: '/services',
       icon: 'briefcase'
     },
     {
-      title: 'Configuración',
+      title: 'Settings',
       url: '/config',
       icon: 'construct'
     },

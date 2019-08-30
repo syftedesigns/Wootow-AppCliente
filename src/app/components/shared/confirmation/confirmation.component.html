@@ -1,0 +1,55 @@
+<ion-header no-border translucent="true">
+    <ion-toolbar class="wootow-toolbar-bg">
+        <ion-title class="text-center">
+            <img src="./assets/images/logo-xs.png" alt="Wootow brand Logo">
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-row align="center">
+        <ion-col size="12" align-self="center">
+            <ion-card>
+                <ion-header>
+                    <ion-img class="w-50 offset-3" [title]="currentService.provider.name" [src]="currentService.provider.profile | noImage:'./assets/images/no_profile_image.png'" [alt]="currentService.provider.name"></ion-img>
+                </ion-header>
+                <ion-card-content padding>
+                    <div class="space-15"></div>
+                    <mat-divider></mat-divider>
+                    <div class="space-15"></div>
+                    <mat-hint>
+                        <h2>{{currentService.provider.name}}</h2>
+                    </mat-hint>
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col>
+                                <ion-chip color="wootow">
+                                    <mat-icon class="material-icons">chrome_reader_mode</mat-icon>&nbsp; Review:
+                                </ion-chip>
+                            </ion-col>
+                            <ion-col>
+                                <mat-hint class="font-10">
+                                    {{currentService.review.review}}
+                                </mat-hint>
+                            </ion-col>
+                        </ion-row>
+                        <div class="space-15"></div>
+                        <mat-divider></mat-divider>
+                        <div class="space-15"></div>
+                        <ion-row>
+                            <ion-col>
+                                <ion-button (click)="FinishService();" expand="full" class="wootow-btn text-dark" shape="round">
+                                    Finish Service
+                                </ion-button>
+                            </ion-col>
+                            <ion-col>
+                                <ion-button (click)="ConfirmCancelation();" expand="full" shape="round" color="danger">
+                                    Reject confirmation
+                                </ion-button>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </ion-card-content>
+            </ion-card>
+        </ion-col>
+    </ion-row>
+</ion-content>

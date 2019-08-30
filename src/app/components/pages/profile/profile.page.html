@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title>Perfil</ion-title>
+        <ion-title>Profile</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -12,52 +12,62 @@
         <ion-row align="center">
             <ion-col align-self="center" size="12">
                 <ion-card>
-                    <ion-card-header>
-                        <img class="r-50 w-50 offset-3" [src]="auth.Customer.picture | noImage:'./assets/images/picture.png'">
-                        <ion-fab *ngIf="auth.GivePlatformInfo() === 'cordova'" vertical="top" horizontal="end">
-                            <ion-fab-button (click)="GalleryControllerFunction();" class="wootow-btn">
-                                <ion-icon class="text-default" name="camera"></ion-icon>
-                            </ion-fab-button>
-                        </ion-fab>
-                    </ion-card-header>
-                    <ion-card-content>
-                        <ion-row>
-                            <ion-col>
-                                <p>
-                                    <mat-hint class="text-default">
-                                        {{auth.Customer.name}} <br> {{auth.Customer.phone}} <br> {{auth.Customer.email}}
-                                    </mat-hint>
-                                </p>
-                            </ion-col>
-                            <ion-col>
-                                <ion-button (click)="OpenProfile();" class="wootow-btn text-dark" expand="full" shape="round">
-                                    Editar mi perfil
-                                </ion-button>
-                            </ion-col>
-                        </ion-row>
-                    </ion-card-content>
+                    <form #formWeb="ngForm" ngNativeValidate (ngSubmit)="Webphoto(formWeb);">
+                        <ion-card-header>
+                            <img *ngIf="!imagePreview" class="w-50 offset-3" [src]="auth.Customer.picture | noImage:'./assets/images/picture.png'">
+                            <img *ngIf="imagePreview && imagePreview !== ''" class="w-50 offset-3" [src]="imagePreview">
+                            <ion-fab vertical="top" horizontal="end">
+                                <ion-fab-button (click)="GalleryControllerFunction();" class="wootow-btn">
+                                    <ion-icon class="text-default" name="camera"></ion-icon>
+                                </ion-fab-button>
+                            </ion-fab>
+                            <ion-button *ngIf="auth.GivePlatformInfo() === 'web' && imagePreview" type="submit" expand="full" class="wootow-btn text-dark">
+                                Confirm
+                            </ion-button>
+                        </ion-card-header>
+                        <ion-card-content>
+                            <ion-row>
+                                <ion-col>
+                                    <p>
+                                        <mat-hint class="text-default">
+                                            {{auth.Customer.name}} <br> {{auth.Customer.phone}} <br> {{auth.Customer.email}}
+                                        </mat-hint>
+                                    </p>
+                                </ion-col>
+                                <ion-col>
+                                    <ion-button (click)="OpenProfile();" class="wootow-btn text-dark" expand="full" shape="round">
+                                        Update account info
+                                    </ion-button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-card-content>
+                        <fieldset class="hide">
+                            <input [(ngModel)]="imagePreview" type="hidden" name="photo">
+                            <input style="display: none;" (change)="WebsitePhotos($event.target.files);" id="photoWeb" ngModel type="file" name="webphoto">
+                        </fieldset>
+                    </form>
                 </ion-card>
                 <ion-card>
                     <mat-spinner class="text-center offset-4" *ngIf="isLoading"></mat-spinner>
                     <ion-card-header *ngIf="NotItems">
                         <ion-card-title style="font-size: 14px !important;">
                             <mat-hint>
-                                No tienes vehiculos registrados
+                                You do not have registered vehicles
                             </mat-hint>
                             <ion-button (click)="OpenVehiclePage(null, 'create');" class="wootow-btn text-default" expand="full" shape="round">
-                                Registrar mi primer vehiculo
+                                Load your first vehicle
                             </ion-button>
                         </ion-card-title>
                     </ion-card-header>
                     <ion-card-header>
                         <ion-title>
-                            Mis Vehiculos
+                            Vehicles added
                         </ion-title>
                     </ion-card-header>
                     <ion-card-content *ngIf="ArrayCars.length >= 1">
                         <ion-fab vertical="top" horizontal="end">
                             <ion-fab-button (click)="OpenVehiclePage(null, 'create');" class="wootow-btn">
-                                <ion-icon name="add"></ion-icon>
+                                <ion-icon class="text-dark" name="add"></ion-icon>
                             </ion-fab-button>
                         </ion-fab>
                         <ion-slides pager="true" scrollbar="true">
@@ -85,7 +95,7 @@
                                                 </ion-col>
                                                 <ion-col>
                                                     <ion-button (click)="DisplayAlertOptions(i, car);" class="btn-delete" color="warning" expand="full" shape="fill">
-                                                        <ion-icon name="trash"></ion-icon>
+                                                        <ion-icon class="text-dark" name="trash"></ion-icon>
                                                     </ion-button>
                                                 </ion-col>
                                             </ion-row>
@@ -99,7 +109,7 @@
                 <ion-card>
                     <ion-card-header>
                         <ion-card-title class="text-default" style="font-size: 18px">
-                            Favoritos
+                            Favorites
                         </ion-card-title>
                     </ion-card-header>
                     <ion-card-content padding>

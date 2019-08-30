@@ -301,6 +301,10 @@
     .wootow-btn {
         --background: #F8EC32 !important;
     }
+    
+    .wootow-toolbar-bg {
+        --background: rgba(248, 236, 50, 1) !important
+    }
     /*.wootow-btn: {
     --background: orange !important;
 }*/
@@ -333,4 +337,9 @@
     
     .mapboxgl-popup-content-wrapper {
         padding: 20px !important
+    }
+    
+    .cancel-popup {
+        --max-width: 300px !important;
+        --max-height: 400px !important
     }

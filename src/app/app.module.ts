@@ -23,13 +23,14 @@ import { Camera } from '@ionic-native/camera/ngx';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
 import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
+import { CallNumber } from '@ionic-native/call-number/ngx';
+import { SMS } from '@ionic-native/sms/ngx';
 
 // Firebase
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireDatabaseModule, AngularFireDatabase } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { NoImagePipe } from './services/pipes/no-image.pipe';
 import { SharedModule } from './components/shared/shared.module';
 
 @NgModule({
@@ -66,6 +67,8 @@ import { SharedModule } from './components/shared/shared.module';
     BackgroundMode,
     OneSignal,
     LaunchNavigator,
+    CallNumber,
+    SMS,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

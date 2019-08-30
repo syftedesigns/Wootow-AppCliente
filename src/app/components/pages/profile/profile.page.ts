@@ -9,6 +9,8 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
 import { ObjectCustomerClass } from 'src/app/classes/customer.class';
+import { NgForm } from '@angular/forms';
+import * as $ from 'jquery';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
@@ -19,7 +21,7 @@ export class ProfilePage implements OnInit {
   constructor(public modal: ModalController, private GalleryController: ActionSheetController,
               private carSign: VehicleService, private global: GlobalService, public auth: AuthService,
               private alert: AlertController, private camera: Camera, private image: ImagePicker) { }
-  ArrayCars: ObjectCarClass[] = [];
+  ArrayCars: ObjectCarClass[] | any = [];
   isLoading: boolean = true;
   NotItems: boolean = false;
   public imagePreview: string;
@@ -71,115 +73,133 @@ export class ProfilePage implements OnInit {
           text: 'Camera',
           icon: 'camera',
           handler: () => {
-            // Camara del dispositivo
-            const options: CameraOptions = {
-              quality: 100,
-              destinationType: this.camera.DestinationType.FILE_URI,
-              encodingType: this.camera.EncodingType.JPEG,
-              mediaType: this.camera.MediaType.PICTURE
-            };
-            // Obtener foto y transformarla en base 64
-            this.camera.getPicture(options).then(
-              (data) => {
-                this.imagePreview = `data:image/jpeg;base64,${data}`;
-                this.imageBase64 = data;
-                // Preguntamos si desea confirmar dicha imagen
-                this.alert.create({
-                  header: 'Confirm this picture',
-                  buttons: [{
-                    text: 'Confirm',
-                    handler: async () => {
-                      this.global.OpenLoader('Updating your profile');
-                      // Si confirma, pues la mandamos a firebase y devolvemos la URL
-                      const Customer: ObjectCustomerClass = new ObjectCustomerClass(
-                        null, null, null, null, null, null, null, null, null, null,
-                        await this.carSign.UploadImageToFirebase(this.imageBase64, 'customer_profile')
-                      );
-                      this.auth.UpdateUser(Customer, `login/image/${this.auth._id}`)
-                        .subscribe((update) => {
-                          if (update.status) {
-                            this.auth.SaveStorage(update.data);
-                            this.auth.LoadStorage();
-                            setTimeout(() => {
-                              this.global.CloseLoader();
-                            }, 500);
-                          }
-                        }, (err) => {
-                          throw err;
-                        });
-                    }
-                  }, {
-                    text: 'Cancel',
-                    role: 'cancel',
-                    handler: () => {
-                      this.imageBase64 = '';
-                      this.imagePreview = '';
-                    }
-                  }],
-                });
-              }, (err) => {
-                this.global.snackBar.open('Failure to open camera', null, {duration: 5000});
-                throw new Error(JSON.stringify(err));
-              }
-            );
+            // Verificamos el dispositivo
+            if (this.auth.GivePlatformInfo() === 'cordova') {
+              // Camara del dispositivo
+              const options: CameraOptions = {
+                quality: 30,
+                destinationType: this.camera.DestinationType.DATA_URL,
+                encodingType: this.camera.EncodingType.JPEG,
+                mediaType: this.camera.MediaType.PICTURE
+              };
+              // Obtener foto y transformarla en base 64
+              this.camera.getPicture(options).then(
+                async (data) => {
+                  this.imagePreview = `data:image/jpeg;base64,${data}`;
+                  this.imageBase64 = data;
+                  // Preguntamos si desea confirmar dicha imagen
+                  const alert = await this.alert.create({
+                    header: 'Confirm this picture',
+                    buttons: [{
+                      text: 'Confirm',
+                      handler: async () => {
+                        this.global.OpenLoader('Updating your profile');
+                        // Si confirma, pues la mandamos a firebase y devolvemos la URL
+                        const Customer: ObjectCustomerClass = new ObjectCustomerClass(
+                          null, null, null, null, null, null, null, null, null, null,
+                          await this.carSign.UploadImageToFirebase(this.imagePreview, 'customer_profile')
+                        );
+                        this.auth.UpdateUser(Customer, `login/image/${this.auth._id}`)
+                          .subscribe((update) => {
+                            if (update.status) {
+                              this.auth.SaveStorage(update.data);
+                              this.auth.LoadStorage();
+                              this.imagePreview = null;
+                              setTimeout(() => {
+                                this.global.CloseLoader();
+                              }, 500);
+                            }
+                          }, (err) => {
+                            throw err;
+                          });
+                      }
+                    }, {
+                      text: 'Cancel',
+                      role: 'cancel',
+                      handler: () => {
+                        this.imageBase64 = null;
+                        this.imagePreview = null;
+                      }
+                    }],
+                  });
+                  await alert.present();
+                }, (err) => {
+                  this.global.snackBar.open('Failure to open camera', null, {duration: 5000});
+                  throw new Error(JSON.stringify(err));
+                }
+              );
+            } else { // Via web
+              console.log('platform not supported');
+              $('input[name=webphoto]').trigger('click');
+              return;
+            }
           }
         },
         {
           text: 'Gallery',
           icon: 'images',
           handler: () => {
-            const options: ImagePickerOptions = {
-              quality: 100,
-              maximumImagesCount: 1,
-              outputType: 1
-            };
-            this.image.getPictures(options).then(
-              (data) => {
-                // tslint:disable-next-line:prefer-for-of
-                for (let i = 0; i < data.length; i++) {
-                  this.imagePreview = `data:image/jpeg;base64,${data[i]}`;
-                  this.imageBase64 = data[i];
-                 // console.log('Image URI: ' + results[i]);
-                  }
-                // Preguntamos si desea confirmar dicha imagen
-                this.alert.create({
-                  header: 'Confirm this picture',
-                  buttons: [{
-                    text: 'Confirm',
-                    handler: async () => {
-                      this.global.OpenLoader('Updating your profile');
-                      // Si confirma, pues la mandamos a firebase y devolvemos la URL
-                      const Customer: ObjectCustomerClass = new ObjectCustomerClass(
-                        null, null, null, null, null, null, null, null, null, null,
-                        await this.carSign.UploadImageToFirebase(this.imageBase64, 'customer_profile')
-                      );
-                      this.auth.UpdateUser(Customer, `login/image/${this.auth._id}`)
-                        .subscribe((update) => {
-                          if (update.status) {
-                            this.auth.SaveStorage(update.data);
-                            this.auth.LoadStorage();
-                            setTimeout(() => {
-                              this.global.CloseLoader();
-                            }, 500);
-                          }
-                        }, (err) => {
-                          throw err;
-                        });
+            // Verificamos la plataforma
+            if (this.auth.GivePlatformInfo() === 'cordova') {
+              const options: ImagePickerOptions = {
+                quality: 100,
+                maximumImagesCount: 1,
+                outputType: 1
+              };
+              this.image.getPictures(options).then(
+                async (data) => {
+                  // tslint:disable-next-line:prefer-for-of
+                  for (let i = 0; i < data.length; i++) {
+                    this.imagePreview = `data:image/jpeg;base64,${data[i]}`;
+                    this.imageBase64 = data[i];
+                   // console.log('Image URI: ' + results[i]);
                     }
-                  }, {
-                    text: 'Cancel',
-                    role: 'cancel',
-                    handler: () => {
-                      this.imageBase64 = '';
-                      this.imagePreview = '';
-                    }
-                  }],
-                });
-              }, (err) => {
-                this.global.snackBar.open('Failure to open gallery thumbnails', null, {duration: 5000});
-                throw new Error(JSON.stringify(err));
-              }
-            );
+                  // Preguntamos si desea confirmar dicha imagen
+                  const alert = await this.alert.create({
+                    header: 'Confirm this picture',
+                    buttons: [{
+                      text: 'Confirm',
+                      handler: async () => {
+                        this.global.OpenLoader('Updating your profile');
+                        // Si confirma, pues la mandamos a firebase y devolvemos la URL
+                        const Customer: ObjectCustomerClass = new ObjectCustomerClass(
+                          null, null, null, null, null, null, null, null, null, null,
+                          await this.carSign.UploadImageToFirebase(this.imagePreview, 'customer_profile')
+                        );
+                        this.auth.UpdateUser(Customer, `login/image/${this.auth._id}`)
+                          .subscribe((update) => {
+                            if (update.status) {
+                              this.auth.SaveStorage(update.data);
+                              this.auth.LoadStorage();
+                              this.imagePreview = null;
+                              setTimeout(() => {
+                                this.global.CloseLoader();
+                              }, 500);
+                            }
+                          }, (err) => {
+                            throw err;
+                          });
+                      }
+                    }, {
+                      text: 'Cancel',
+                      role: 'cancel',
+                      handler: () => {
+                        this.imageBase64 = '';
+                        this.imagePreview = '';
+                      }
+                    }],
+                  });
+                  await alert.present();
+                }, (err) => {
+                  this.global.snackBar.open('Failure to open gallery thumbnails', null, {duration: 5000});
+                  throw new Error(JSON.stringify(err));
+                }
+              );
+            } else { // Plataforma web
+              console.log('platform not supported');
+              $('input[name=webphoto]').trigger('click');
+              return;
+            }
           }
         },
         {
@@ -257,5 +277,52 @@ export class ProfilePage implements OnInit {
           }
         });
     });
+  }
+  async Webphoto(pictureData: NgForm) {
+    if (pictureData.invalid) {
+      return;
+    }
+    this.global.OpenLoader('Updating your profile');
+    // Si confirma, pues la mandamos a firebase y devolvemos la URL
+    const Customer: ObjectCustomerClass = new ObjectCustomerClass(
+      null, null, null, null, null, null, null, null, null, null,
+      await this.carSign.UploadImageToFirebase(pictureData.value.photo, 'customer_profile')
+    );
+    this.auth.UpdateUser(Customer, `login/image/${this.auth._id}`)
+      .subscribe((update) => {
+        if (update.status) {
+          this.auth.SaveStorage(update.data);
+          this.auth.LoadStorage();
+          this.imagePreview = null;
+          setTimeout(() => {
+            this.global.CloseLoader();
+            this.global.snackBar.open('Picture addedd', null, {duration: 3000});
+          }, 500);
+        }
+      }, (err) => {
+        throw err;
+      });
+  }
+
+  // Para cargar fotos via web
+  WebsitePhotos(photo: File, operationType?: string): void {
+    const target = photo[0];
+    if (target.type === 'image/jpeg' || target.type === 'image/png'
+    || target.type === 'image/jpg' || target.type === 'image/gif') {
+      const size = (target.size);
+      if (size < (1024 * 1024)) {
+        const reader = new FileReader();
+        reader.onload = (e: any): void => {
+          this.imagePreview = e.target.result;
+        };
+        reader.readAsDataURL(target);
+      } else {
+        this.global.snackBar.open('The file size is very big', null, {duration: 3000});
+        return;
+      }
+    } else {
+      this.global.snackBar.open('You are sending an invalid file, please verify the extension', null, {duration: 3000});
+      return;
+    }
   }
 }

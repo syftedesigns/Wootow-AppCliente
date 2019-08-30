@@ -1,0 +1,46 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons>
+            <ion-button icon-only>
+                <ion-icon name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title class="text-center">
+            Cancel Service
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-grid>
+        <ion-row align="center">
+            <ion-col align-self="center" size="12">
+                <ion-card>
+                    <ion-card-header>
+                        <h3 class="font-12">
+                            Confirmation for cancel this service
+                        </h3>
+                    </ion-card-header>
+                    <ion-card-content>
+                        <form ngNativeValidate #formCancel="ngForm" (ngSubmit)="RequestCancellation(formCancel);">
+                            <div class="form-group">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Reason:</mat-label>
+                                    <textarea required ngModel matInput name="reason" cols="10" rows="5"></textarea>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-group">
+                                <ion-button type="submit" expand="full" class="wootow-btn text-dark">
+                                    Confirm
+                                </ion-button>
+                                <div class="space-10"></div>
+                                <mat-hint class="text-dark font-10">
+                                    Upon cancelling the service, we will refund the money automatically in your payment method used
+                                </mat-hint>
+                            </div>
+                        </form>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

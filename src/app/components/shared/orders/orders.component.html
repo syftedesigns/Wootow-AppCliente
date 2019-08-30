@@ -1,0 +1,185 @@
+<ion-header>
+    <ion-toolbar class="wootow-bg">
+        <ion-buttons slot="start">
+            <ion-button (click)="modal.dismiss();" icon-only>
+                <ion-icon name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title class="text-center">
+            Service #{{CurrentService.key}}
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-grid>
+        <ion-row align="center">
+            <ion-col size="12" align-self="center">
+                <img [src]="CurrentService.srcMap" [alt]="CurrentService.places.origin.text">
+                <div class="space-15"></div>
+                <!-- Tabs -->
+                <mat-tab-group>
+                    <mat-tab label="Route">
+                        <ion-card>
+                            <ion-card-content>
+                                <ion-list lines="none">
+                                    <ion-item>
+                                        <ion-chip color="medium">
+                                            <ion-label>
+                                                <mat-icon class="material-icons">room</mat-icon>
+                                                Location
+                                            </ion-label>
+                                        </ion-chip>
+                                        &nbsp;
+                                        <ion-label text-wrap class="lines">
+                                            <mat-hint>
+                                                {{CurrentService.places.origin.place_name}}
+                                            </mat-hint>
+                                        </ion-label>
+                                    </ion-item>
+                                    <ion-item>
+                                        <ion-chip color="medium">
+                                            <ion-label>
+                                                <mat-icon class="material-icons">near_me</mat-icon>
+                                                Destiny
+                                            </ion-label>
+                                        </ion-chip>
+                                        &nbsp;
+                                        <ion-label text-wrap class="lines">
+                                            <mat-hint>
+                                                {{CurrentService.places.destiny.place_name}}
+                                            </mat-hint>
+                                        </ion-label>
+                                    </ion-item>
+                                    <ion-item>
+                                        <ion-chip color="medium">
+                                            <ion-label>
+                                                <mat-icon class="material-icons">local_movies</mat-icon>
+                                                Miles
+                                            </ion-label>
+                                        </ion-chip>
+                                        &nbsp;
+                                        <ion-label text-wrap class="lines">
+                                            <mat-hint>
+                                                {{CurrentService.prices.Miles}}
+                                            </mat-hint>
+                                        </ion-label>
+                                    </ion-item>
+                                    <ion-item>
+                                        <ion-chip color="medium">
+                                            <ion-label>
+                                                <mat-icon class="material-icons">traffic</mat-icon>
+                                                Aprox Duration
+                                            </ion-label>
+                                        </ion-chip>
+                                        &nbsp;
+                                        <ion-label text-wrap class="lines">
+                                            <mat-hint>
+                                                {{CurrentService.duration}} Minutes
+                                            </mat-hint>
+                                        </ion-label>
+                                    </ion-item>
+                                    <ion-item>
+                                        <ion-chip color="medium">
+                                            <ion-label>
+                                                <mat-icon class="material-icons">timeline</mat-icon>
+                                                Started at
+                                            </ion-label>
+                                        </ion-chip>
+                                        &nbsp;
+                                        <ion-label text-wrap class="lines">
+                                            <mat-hint>
+                                                {{CurrentService.token.created | date}}
+                                            </mat-hint>
+                                        </ion-label>
+                                    </ion-item>
+                                    <ion-item>
+                                        <ion-chip color="medium">
+                                            <ion-label>
+                                                <mat-icon class="material-icons">credit_card</mat-icon>
+                                                Amount Paid
+                                            </ion-label>
+                                        </ion-chip>
+                                        &nbsp;
+                                        <ion-label text-wrap class="lines">
+                                            <mat-hint>
+                                                ${{CurrentService.prices.Service}}
+                                            </mat-hint>
+                                        </ion-label>
+                                    </ion-item>
+                                    <ion-item>
+                                        <ion-chip color="medium">
+                                            <ion-label>
+                                                <mat-icon class="material-icons">credit_card</mat-icon>
+                                                Paid with
+                                            </ion-label>
+                                        </ion-chip>
+                                        &nbsp;
+                                        <ion-label text-wrap class="lines">
+                                            <mat-hint>
+                                                <span class="badge badge-dark">{{CurrentService.token.card.brand}}</span>&nbsp;*{{CurrentService.token.card.last4}}
+                                            </mat-hint>
+                                        </ion-label>
+                                    </ion-item>
+                                </ion-list>
+                            </ion-card-content>
+                        </ion-card>
+                    </mat-tab>
+                    <mat-tab label="Provider">
+                        <ion-card>
+                            <ion-card-header>
+                                <img class="w-50 offset-3" [src]="CurrentService.provider.profile | noImage:'./assets/images/no_profile_image.png'" [alt]="CurrentService.provider.name">
+                            </ion-card-header>
+                            <ion-card-content>
+                                <ion-list lines="none">
+                                    <ion-item>
+                                        <ion-chip color="medium">
+                                            <ion-label>
+                                                <mat-icon class="material-icons">perm_identity</mat-icon>
+                                                Full name
+                                            </ion-label>
+                                        </ion-chip>
+                                        &nbsp;
+                                        <ion-label text-wrap class="lines">
+                                            <mat-hint>
+                                                {{CurrentService.provider.name}}
+                                            </mat-hint>
+                                        </ion-label>
+                                    </ion-item>
+                                    <ion-item>
+                                        <ion-chip color="medium">
+                                            <ion-label>
+                                                <mat-icon class="material-icons">account_box</mat-icon>
+                                                Email
+                                            </ion-label>
+                                        </ion-chip>
+                                        &nbsp;
+                                        <ion-label text-wrap class="lines">
+                                            <mat-hint>
+                                                {{CurrentService.provider.email}}
+                                            </mat-hint>
+                                        </ion-label>
+                                    </ion-item>
+                                    <ion-item>
+                                        <ion-chip color="medium">
+                                            <ion-label>
+                                                <mat-icon class="material-icons">perm_phone_msg</mat-icon>
+                                                Phone
+                                            </ion-label>
+                                        </ion-chip>
+                                        &nbsp;
+                                        <ion-label text-wrap class="lines">
+                                            <mat-hint>
+                                                {{CurrentService.provider.phone}}
+                                            </mat-hint>
+                                        </ion-label>
+                                    </ion-item>
+                                </ion-list>
+                            </ion-card-content>
+                        </ion-card>
+                    </mat-tab>
+                </mat-tab-group>
+                <!-- end Tabs -->
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

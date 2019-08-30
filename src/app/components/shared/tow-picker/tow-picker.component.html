@@ -59,6 +59,7 @@
             <ion-button (click)="DisplayChargeModal();" expand="full" class="wootow-btn text-dark">
                 <mat-hint *ngIf="this.TruckType1">Confirm Hook truck</mat-hint>
                 <mat-hint *ngIf="this.TruckType2">Confirm Flatbet</mat-hint>
+                <mat-hint *ngIf="!this.TruckType1 && !this.TruckType2">Select an option</mat-hint>
             </ion-button>
         </ion-col>
     </ion-row>

@@ -88,10 +88,10 @@ export class GeolocationService {
         }),
         catchError( (err: any)  => {
           console.error(err);
-          this.snackBar.open('Ops! We have problems to process your data. Please try again', null, {
+          /*this.snackBar.open('Ops! We have problems to process your data. Please try again', null, {
             duration: 5000,
             panelClass: ['red-snackbar']
-          });
+          });*/
           return new Observable<string | boolean>();
         })
       );
@@ -195,5 +195,26 @@ export class GeolocationService {
         resolve(false);
       }
     });
+  }
+    /*
+   Verifica si tenemos un servicio en curso
+   es decir, buscamos todos los servicios donde el tracking sea != de complete
+   ya que los complete, son servicios que ya completamos y no deben de visualizarse
+   */
+  GetMyCurrentService(_idCustomer: string) {
+    return this.db.list('services', ref =>
+    ref.orderByChild('customer/_id').equalTo(_idCustomer)).valueChanges().pipe(
+      map((data: any) => {
+         return data;
+      }),
+      catchError( (err: any)  => {
+        console.error(err);
+        this.snackBar.open('Ops! We have problems to process your data. Please try again', null, {
+          duration: 5000,
+          panelClass: ['red-snackbar']
+        });
+        return new Observable<string | boolean>();
+      })
+    );
   }
 }

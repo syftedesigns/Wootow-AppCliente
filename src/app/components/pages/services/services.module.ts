@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ServicesPage } from './services.page';
+import { AngularMaterialModule } from '../../../angular-material.module';
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    AngularMaterialModule,
     RouterModule.forChild(routes)
   ],
   declarations: [ServicesPage]

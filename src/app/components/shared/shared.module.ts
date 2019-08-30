@@ -17,6 +17,10 @@ import { SignUpComponent } from './auth/sign-up/sign-up.component';
 import { NoImagePipe } from '../../services/pipes/no-image.pipe';
 import { TowProfileComponent } from './tow-profile/tow-profile.component';
 import { ReviewComponent } from './review/review.component';
+import { CancelComponent } from './card/cancel/cancel.component';
+import { ConfirmationComponent } from './confirmation/confirmation.component';
+import { OrdersComponent } from './orders/orders.component';
+import { MsgComponent } from './msg/msg.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +35,11 @@ import { ReviewComponent } from './review/review.component';
     SignUpComponent,
     NoImagePipe,
     TowProfileComponent,
-    ReviewComponent
+    ReviewComponent,
+    CancelComponent,
+    ConfirmationComponent,
+    OrdersComponent,
+    MsgComponent
   ],
   entryComponents: [
     AddressComponent,
@@ -44,7 +52,11 @@ import { ReviewComponent } from './review/review.component';
     LoginPopupComponent,
     SignUpComponent,
     TowProfileComponent,
-    ReviewComponent
+    ReviewComponent,
+    CancelComponent,
+    ConfirmationComponent,
+    OrdersComponent,
+    MsgComponent
   ],
   exports: [
     AddressComponent,
@@ -58,7 +70,11 @@ import { ReviewComponent } from './review/review.component';
     SignUpComponent,
     NoImagePipe,
     TowProfileComponent,
-    ReviewComponent
+    ReviewComponent,
+    CancelComponent,
+    ConfirmationComponent,
+    OrdersComponent,
+    MsgComponent
   ],
   imports: [
     CommonModule,

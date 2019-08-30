@@ -15,6 +15,11 @@ import { environment } from 'src/environments/environment';
 import { TowProfileComponent } from '../components/shared/tow-profile/tow-profile.component';
 import { ObjectProviderClass } from '../classes/provider.class';
 import { ReviewComponent } from '../components/shared/review/review.component';
+import { PaymentsService } from '../services/ssl/payments.service';
+import { API_SERVER_NODE_LOCAL } from '../global/API.config';
+import { CancelComponent } from '../components/shared/card/cancel/cancel.component';
+import { ConfirmationComponent } from '../components/shared/confirmation/confirmation.component';
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -33,7 +38,7 @@ export class HomePage implements OnInit {
   PlaceOriginAllData: any; // Obtenemos toda la ifnromación acerca del origen
   PlaceDestinyAllData: any; // Obtenemos toda la información acerca del Destino
   Destiny: number[]; // Destino en Coordenadas para el marcador
-  Driver: number[]; // Ubicación del conductor
+  Driver: number[] = []; // Ubicación del conductor
   Duration: number; // Duración estimado del viaje
   DurationPX: boolean = false; // Arrima la tarjeta dependiendo de la acción del mapa
   idLayer: string; // 213121231231
@@ -46,7 +51,8 @@ export class HomePage implements OnInit {
   constructor(public geolocation: GeolocationService, public modal: ModalController,
               private global: GlobalService, private bottomSheet: MatBottomSheet,
               private auth: AuthService, private launchNavigator: LaunchNavigator,
-              private platform: Platform, private _push: PushService) {
+              private platform: Platform, private _push: PushService,
+              private payment: PaymentsService) {
     this.global.OpenLoader('Loading modules');
     setTimeout(() => {
       // Al inicializar la home, buscamos a través del gps o navigator la ubicación exacta del dispositivo
@@ -357,9 +363,11 @@ export class HomePage implements OnInit {
       // Punto de destino en el marcador
       this.Destiny = ObjectMap.places.destiny.geometry.coordinates;
       // Ubicación del conductor
-      if (this.Tracking !== 'pending' && (this.Tracking !== 'complete')) {
-        this.Driver = [ObjectMap.provider.currentLng, ObjectMap.provider.currentLat];
-      }
+      setTimeout(() => {
+        if (this.Tracking !== 'pending' && (this.Tracking !== 'complete')) {
+          this.Driver = [ObjectMap.provider.currentLng, ObjectMap.provider.currentLat];
+        }
+      }, 2000);
       console.log(this.Driver);
       console.log(this.Destiny);
       // Estructuramos el map
@@ -477,16 +485,43 @@ export class HomePage implements OnInit {
     return new Promise((resolve, reject) => {
       this.loadingFirebaseService = true;
       this.geolocation.ReturnServicesFromFirebase()
-        .subscribe((trackingMap: any[]) => {
+        .subscribe(async (trackingMap: any[]) => {
           if (trackingMap) {
             // Nos devuelve todos los servicios, debemos filtrarlos para obtener el tracking
             if (trackingMap.length >= 1) {
               // Hacemos un bucle en caso de que haya mas servicios
               // En el bucle debemos buscar los que sean != complete
               for (const services of trackingMap) {
-                if (services.tracking !== 'complete') {
+                if (services.tracking !== 'complete' && (services.tracking !== 'canceled')) {
                   this.loadingFirebaseService = false;
                   this.Tracking = services.tracking; // Actualiza siempre el tracking para el HTML
+                  // Verificamos si el trackign es que el conductor tomo el servicio
+                  // Si tomo el servicio, debe actualizar de forma automatica el estado dle servicio
+                  // Para que pueda tomar el pago
+                  if (this.Tracking === 'onDrivingToCustomer') {
+                    if (!services.charge.captured) {
+                      // El pago sigue en hold, entonces debemos recargar la tarjeta y actualizar la db
+                      if (await this.ChargeCard(services.charge.id, services.key)) {
+                        console.log('Payment charged');
+                      }
+                    }
+                    // Para verificar si el conductor tomo el servicio y pide la confirmación
+                  } else if (this.Tracking === 'pendingConfirmation') {
+                    // Si esta aca, verificamos que el cliente aun no haya confirmado el servicio
+                    if ((services.CustomerConfirmation !== undefined)
+                    && (services.CustomerConfirmation !== null)
+                    && (!services.CustomerConfirmation)) {
+                      // Cada tres segundos verifica si el mapa esta renderizado y ya el servicio fue configurado
+                      const TryFinishService = setInterval(async () => {
+                        if (this.RenderMap && (this.RandomService)) {
+                          this.ApprovedService();
+                          clearInterval(TryFinishService);
+                        } else {
+                          console.log('No ha renderizado');
+                        }
+                      }, 3000);
+                    }
+                  }
                   console.log(this.Tracking);
                   resolve(services);
                 } else {
@@ -507,15 +542,6 @@ export class HomePage implements OnInit {
   async DisplayProviderPopup() {
     const modal = await this.modal.create({
       component: TowProfileComponent,
-      componentProps: this.RandomService,
-      backdropDismiss: false
-    });
-    await modal.present();
-  }
-  // Popup para finalizar el servicio
-  async DisplayReviewPopup() {
-    const modal = await this.modal.create({
-      component: ReviewComponent,
       componentProps: this.RandomService,
       backdropDismiss: false
     });
@@ -576,5 +602,124 @@ export class HomePage implements OnInit {
             // throw new Error(err);
           });
       });
+    }
+    // Función que se encarga de recargar la tarjeta y actualizar la db, solo ocurre una unica vez una vez el servicio ha sido tomado
+    private ChargeCard(transactionId: string, nodeKey: string): Promise<boolean> {
+      return new Promise((resolve, reject) => {
+        this.payment.CardTransactionsTypes(
+          `${API_SERVER_NODE_LOCAL}/client/payment/stripe/newAPI/charge/pending`,
+          transactionId).subscribe(
+            (charge) => {
+              if (charge.status) {
+                // Hizo el recargo de la tarjeta, debemos actualizar ahora la db
+                const updateFb: any = {
+                  transaction: charge, // Información de la transacción
+                  captured: true // Cambia el valor booleano que identifica si la transaccion ya fue tomada
+                };
+                this.geolocation.UpdateFirebaseService(updateFb, `services/${nodeKey}/charge`)
+                  .then((updated: boolean) => {
+                    if (updated) {
+                      resolve(true);
+                    }
+                  }, (err) => {
+                    resolve(null);
+                  });
+              }
+            }
+          );
+      });
+    }
+    // Función que abre la ventana de cancelar el servicio si no ha sido tomado
+    // Para reembolsar el dinero
+    async CancelService() {
+      const modal = await this.modal.create({
+        component: CancelComponent,
+        componentProps: {
+          currentService: this.RandomService // Información del servicio en curso
+        },
+        cssClass: ['cancel-popup']
+      });
+      await modal.present();
+      // Verificamos si hizo el refund para cancelar el servicio
+      modal.onDidDismiss().then(
+        async (data) => {
+          if (data.role === 'refunded') {
+            // Configuramos el objeto firebase con la data del reembolso para el backend
+            const FirebaseUpdate: any = {
+              tracking: 'canceled',
+              refund: data.data
+            };
+            // Actualizamos Firebase
+            this.geolocation.UpdateFirebaseService(FirebaseUpdate, `services/${this.RandomService.key}`).then(
+              (updated: boolean) => {
+                if (updated) {
+                  // Si actualizo, procedemos a destruirle los datos al cliente
+                  this.IsRoutePicked = false; // Sacamos el router Picked
+                  this.RenderMap = false;
+                  this.Map.removeLayer(this.idLayer); // Removemos el layer
+                  setTimeout(() => {
+                    this.RenderMap = true;
+                  }, 500);
+                }
+              }
+            );
+          }
+        }
+      );
+    }
+    // Aprobación de que el gruero completo el servicio
+    async ApprovedService() {
+      const modal = await this.modal.create({
+        component: ConfirmationComponent,
+        componentProps: {
+          currentService: this.RandomService // Información del servicio en curso
+        },
+      });
+      await modal.present();
+      // Verificamos si hizo el refund para cancelar el servicio
+      modal.onDidDismiss().then(
+        async (data) => {
+          if (data.role === 'approved') {
+            // Configuramos el objeto firebase con la data del reembolso para el backend
+            const FirebaseUpdate: any = {
+              tracking: 'complete', // Marca como completado
+              CustomerConfirmation: true // Marca el servicio como completado, asi no aparecerá mas el popup
+            };
+            // Actualizamos Firebase
+            this.geolocation.UpdateFirebaseService(FirebaseUpdate, `services/${this.RandomService.key}`).then(
+              (updated: boolean) => {
+                if (updated) {
+                  // Si actualizo, procedemos a destruirle los datos al cliente
+                  this.IsRoutePicked = false; // Sacamos el router Picked
+                  this.RenderMap = false;
+                  this.Map.removeLayer(this.idLayer); // Removemos el layer
+                  setTimeout(() => {
+                    this.RenderMap = true;
+                  }, 500);
+                }
+              }
+            );
+            // Trae engaged
+          } else {
+            // Si trae otro track, significa que rechazo, actualizamos de igual forma la db
+            const FirebaseUpdate: any = {
+              tracking: 'engaged', // Continua el servicio
+              CustomerConfirmation: null // Marca nulo, para que no aparezca el popup de finalizar servicio
+            };
+            // Actualizamos Firebase
+            this.geolocation.UpdateFirebaseService(FirebaseUpdate, `services/${this.RandomService.key}`).then(
+              (updated: boolean) => {
+                if (updated) {
+                  // No pasa nada, el servicio sigue en curso
+                  this.global.snackBar.open('Service started again', null, {
+                    duration: 5000
+                  });
+                  return;
+                }
+              }
+            );
+          }
+        }
+      );
     }
 }

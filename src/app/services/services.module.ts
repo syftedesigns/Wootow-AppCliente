@@ -8,6 +8,7 @@ import { AngularMaterialModule } from '../angular-material.module';
 import { AuthService } from './auth/auth.service';
 import { VehicleService } from './auth/vehicle.service';
 import { PushService } from './auth/push.service';
+import { PaymentsService } from './ssl/payments.service';
 
 @NgModule({
   declarations: [],
@@ -22,7 +23,8 @@ import { PushService } from './auth/push.service';
     GlobalService,
     AuthService,
     VehicleService,
-    PushService
+    PushService,
+    PaymentsService
   ]
 })
 export class ServicesModule { }

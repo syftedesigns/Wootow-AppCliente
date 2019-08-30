@@ -10,12 +10,22 @@
             </ion-fab-button>
         </mgl-marker>
         <!-- Para monitorear al conductor -->
-        <mgl-marker *ngIf="IsRoutePicked && Tracking !== 'pending'" [lngLat]="Driver" [draggable]="false">
+        <mgl-marker *ngIf="IsRoutePicked && Tracking !== 'pending' && Driver.length >= 1" [lngLat]="Driver" [draggable]="true">
             <ion-fab-button (click)="DisplayProviderPopup();" class="wootow-btn" size="small">
                 <img src="./assets/images/tow-destiny.png" alt="Wootow logo">
             </ion-fab-button>
         </mgl-marker>
         <!-- end Condcutor -->
+        <mgl-marker [lngLat]="[CurrentPosition.longitude, CurrentPosition.latitude]">
+            <ion-fab-button color="dark" size="small">
+                <mat-icon class="material-icons text-white">directions_car</mat-icon>
+            </ion-fab-button>
+            <!--<ion-fab>
+                <ion-fab-button size="small" color="dark">
+                    <mat-icon class="material-icons font-22">pin_drop</mat-icon>
+                </ion-fab-button>
+            </ion-fab>-->
+        </mgl-marker>
         <!-- Final marcador de Origen -->
         <!-- Ruta marcada  -->
         <!--<mgl-layer [layout]="{'line-join': 'round', 'line-cap': 'round'}" [paint]="{'line-color': '#78849E', 'line-width': 2}" id="routing" *ngIf="IsRoutePicked" type="line" [source]="this.Layer"></mgl-layer>-->
@@ -35,7 +45,7 @@
             <form style="position: relative; left: -5em !important" class="text-center">
                 <div class="form-group edit">
                     <mat-form-field appearance="fill" class="w-100">
-                        <mat-label *ngIf="!IsRoutePicked" class="font-16">¿A donde querías llegar?</mat-label>
+                        <mat-label *ngIf="!IsRoutePicked" class="font-14">Where are you going?</mat-label>
                         <mat-label *ngIf="IsRoutePicked" class="font-16">I want to change my route</mat-label>
                         <input (focus)="DisplaySearchPopup();" matInput>
                         <mat-icon matSuffix>near_me</mat-icon>
@@ -52,6 +62,15 @@
                 </ion-fab-button>
             </ion-fab>
         </mgl-control>
+        <!-- Cancelar el servicio si hay mucho tiempo de espera, o cambia de opción -->
+        <mgl-control *ngIf="Tracking === 'pending' && IsRoutePicked" position="bottom-right">
+            <ion-fab vertical="bottom" horizontal="center">
+                <ion-fab-button (click)="CancelService();" style="margin-left: -2em" color="danger">
+                    <mat-icon class="material-icons">warning</mat-icon>
+                </ion-fab-button>
+            </ion-fab>
+        </mgl-control>
+        <!-- end Cancel service -->
         <!-- Fin bloque de busqueda GPS -->
         <!-- Marcador de Destino de la ruta -->
         <mgl-marker *ngIf="IsRoutePicked" [lngLat]="Destiny" [draggable]="false">
@@ -86,7 +105,7 @@
         <!-- Finalizar Servicio -->
         <mgl-control *ngIf="IsRoutePicked && Tracking === 'engaged'" position="bottom-left">
             <ion-row align="center">
-                <ion-col size="6" align-self="center">
+                <!--<ion-col size="6" align-self="center">
                     <div>
                         <ion-button (click)="DisplayReviewPopup();" class="wootow-btn text-dark" expand="full" shape="round">
                             <mat-icon matSuffix class="material-icons text-dark">stars</mat-icon>
@@ -95,8 +114,8 @@
                             </mat-hint>
                         </ion-button>
                     </div>
-                </ion-col>
-                <ion-col size="6">
+                </ion-col>-->
+                <ion-col size="12">
                     <div>
                         <ion-button (click)="StartNavigation();" class="wootow-btn text-dark" expand="full" shape="round">
                             <mat-icon matSuffix class="material-icons text-dark">directions</mat-icon>
